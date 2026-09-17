@@ -1,0 +1,2802 @@
+{
+  "meta": {
+    "policies_tested": [
+      "none",
+      "random",
+      "critical_aware",
+      "grace_period"
+    ]
+  },
+  "tpl": {
+    "cfg": {
+      "num_cores": 8,
+      "db_size": 2000,
+      "contention": 0.6,
+      "ops_per_txn": 6,
+      "mean_op_time": 0.4,
+      "lock_timeout": 25.0,
+      "preempt_rate": 0.14,
+      "preempt_penalty": 2.0,
+      "sim_time": 15000,
+      "arrival_rate": 2.0,
+      "seed": 42
+    },
+    "matrix": {
+      "none": {
+        "protocol": "2pl",
+        "policy": "none",
+        "attempted": 29758,
+        "committed": 29755,
+        "aborted": 0,
+        "abort_rate_pct": 0.0,
+        "throughput_tps": 1983.67,
+        "mean_latency_ms": 1.711,
+        "p99_latency_ms": 4.99,
+        "cpu_ms_wasted_on_aborts": 0.0,
+        "preempt_events": 0,
+        "deferred_events": 0
+      },
+      "random": {
+        "protocol": "2pl",
+        "policy": "random",
+        "attempted": 29913,
+        "committed": 29905,
+        "aborted": 0,
+        "abort_rate_pct": 0.0,
+        "throughput_tps": 1993.67,
+        "mean_latency_ms": 2.445,
+        "p99_latency_ms": 10.44,
+        "cpu_ms_wasted_on_aborts": 0.0,
+        "preempt_events": 8187,
+        "deferred_events": 0
+      },
+      "critical_aware": {
+        "protocol": "2pl",
+        "policy": "critical_aware",
+        "attempted": 29965,
+        "committed": 29960,
+        "aborted": 0,
+        "abort_rate_pct": 0.0,
+        "throughput_tps": 1997.33,
+        "mean_latency_ms": 1.722,
+        "p99_latency_ms": 4.976,
+        "cpu_ms_wasted_on_aborts": 0.0,
+        "preempt_events": 0,
+        "deferred_events": 6829
+      },
+      "grace_period": {
+        "protocol": "2pl",
+        "policy": "grace_period",
+        "attempted": 30050,
+        "committed": 30049,
+        "aborted": 0,
+        "abort_rate_pct": 0.0,
+        "throughput_tps": 2003.27,
+        "mean_latency_ms": 1.802,
+        "p99_latency_ms": 6.118,
+        "cpu_ms_wasted_on_aborts": 0.0,
+        "preempt_events": 727,
+        "deferred_events": 6260
+      }
+    },
+    "layer_gap": {
+      "p99_latency_ms": {
+        "none": 100.0,
+        "random": 0.0,
+        "critical_aware": 100.3,
+        "grace_period": 79.3
+      },
+      "abort_rate_pct": {
+        "none": 100.0,
+        "random": 100.0,
+        "critical_aware": 100.0,
+        "grace_period": 100.0
+      }
+    }
+  },
+  "occ": {
+    "cfg": {
+      "num_cores": 8,
+      "db_size": 2000,
+      "contention": 0.913,
+      "ops_per_txn": 8,
+      "mean_op_time": 0.4,
+      "lock_timeout": 25.0,
+      "preempt_rate": 0.14,
+      "preempt_penalty": 2.0,
+      "sim_time": 15000,
+      "arrival_rate": 2.0,
+      "seed": 42
+    },
+    "matrix": {
+      "none": {
+        "protocol": "occ",
+        "policy": "none",
+        "attempted": 30208,
+        "committed": 22358,
+        "aborted": 7848,
+        "abort_rate_pct": 25.98,
+        "throughput_tps": 1490.53,
+        "mean_latency_ms": 2.514,
+        "p99_latency_ms": 7.182,
+        "cpu_ms_wasted_on_aborts": 22100.4,
+        "preempt_events": 0,
+        "deferred_events": 0
+      },
+      "random": {
+        "protocol": "occ",
+        "policy": "random",
+        "attempted": 29910,
+        "committed": 21012,
+        "aborted": 8889,
+        "abort_rate_pct": 29.72,
+        "throughput_tps": 1400.8,
+        "mean_latency_ms": 3.889,
+        "p99_latency_ms": 15.787,
+        "cpu_ms_wasted_on_aborts": 31340.0,
+        "preempt_events": 12144,
+        "deferred_events": 0
+      },
+      "critical_aware": {
+        "protocol": "occ",
+        "policy": "critical_aware",
+        "attempted": 30060,
+        "committed": 21886,
+        "aborted": 8161,
+        "abort_rate_pct": 27.15,
+        "throughput_tps": 1459.07,
+        "mean_latency_ms": 3.741,
+        "p99_latency_ms": 14.478,
+        "cpu_ms_wasted_on_aborts": 27977.2,
+        "preempt_events": 10335,
+        "deferred_events": 1729
+      },
+      "grace_period": {
+        "protocol": "occ",
+        "policy": "grace_period",
+        "attempted": 29863,
+        "committed": 21598,
+        "aborted": 8257,
+        "abort_rate_pct": 27.65,
+        "throughput_tps": 1439.87,
+        "mean_latency_ms": 3.729,
+        "p99_latency_ms": 14.208,
+        "cpu_ms_wasted_on_aborts": 28390.2,
+        "preempt_events": 10229,
+        "deferred_events": 1526
+      }
+    },
+    "layer_gap": {
+      "abort_rate_pct": {
+        "none": 100.0,
+        "random": 0.0,
+        "critical_aware": 68.7,
+        "grace_period": 55.3
+      },
+      "throughput_tps": {
+        "none": 100.0,
+        "random": 0.0,
+        "critical_aware": 64.9,
+        "grace_period": 43.5
+      }
+    },
+    "sweep": {
+      "none": [
+        {
+          "contention": 0.5,
+          "abort_rate_pct": 7.02,
+          "throughput_tps": 1847.73
+        },
+        {
+          "contention": 0.6,
+          "abort_rate_pct": 8.64,
+          "throughput_tps": 1823.0
+        },
+        {
+          "contention": 0.7,
+          "abort_rate_pct": 10.71,
+          "throughput_tps": 1782.8
+        },
+        {
+          "contention": 0.8,
+          "abort_rate_pct": 14.97,
+          "throughput_tps": 1722.47
+        },
+        {
+          "contention": 0.85,
+          "abort_rate_pct": 18.2,
+          "throughput_tps": 1633.53
+        },
+        {
+          "contention": 0.9,
+          "abort_rate_pct": 24.04,
+          "throughput_tps": 1522.93
+        },
+        {
+          "contention": 0.913,
+          "abort_rate_pct": 25.98,
+          "throughput_tps": 1490.53
+        },
+        {
+          "contention": 0.95,
+          "abort_rate_pct": 34.72,
+          "throughput_tps": 1299.33
+        }
+      ],
+      "random": [
+        {
+          "contention": 0.5,
+          "abort_rate_pct": 12.17,
+          "throughput_tps": 1753.53
+        },
+        {
+          "contention": 0.6,
+          "abort_rate_pct": 13.75,
+          "throughput_tps": 1733.2
+        },
+        {
+          "contention": 0.7,
+          "abort_rate_pct": 16.1,
+          "throughput_tps": 1669.2
+        },
+        {
+          "contention": 0.8,
+          "abort_rate_pct": 19.51,
+          "throughput_tps": 1602.73
+        },
+        {
+          "contention": 0.85,
+          "abort_rate_pct": 23.2,
+          "throughput_tps": 1550.47
+        },
+        {
+          "contention": 0.9,
+          "abort_rate_pct": 28.22,
+          "throughput_tps": 1431.73
+        },
+        {
+          "contention": 0.913,
+          "abort_rate_pct": 29.72,
+          "throughput_tps": 1400.8
+        },
+        {
+          "contention": 0.95,
+          "abort_rate_pct": 38.36,
+          "throughput_tps": 1228.8
+        }
+      ],
+      "critical_aware": [
+        {
+          "contention": 0.5,
+          "abort_rate_pct": 7.59,
+          "throughput_tps": 1838.93
+        },
+        {
+          "contention": 0.6,
+          "abort_rate_pct": 9.25,
+          "throughput_tps": 1797.53
+        },
+        {
+          "contention": 0.7,
+          "abort_rate_pct": 11.68,
+          "throughput_tps": 1774.0
+        },
+        {
+          "contention": 0.8,
+          "abort_rate_pct": 16.26,
+          "throughput_tps": 1673.27
+        },
+        {
+          "contention": 0.85,
+          "abort_rate_pct": 19.92,
+          "throughput_tps": 1611.93
+        },
+        {
+          "contention": 0.9,
+          "abort_rate_pct": 25.41,
+          "throughput_tps": 1471.73
+        },
+        {
+          "contention": 0.913,
+          "abort_rate_pct": 27.15,
+          "throughput_tps": 1459.07
+        },
+        {
+          "contention": 0.95,
+          "abort_rate_pct": 35.79,
+          "throughput_tps": 1282.6
+        }
+      ],
+      "grace_period": [
+        {
+          "contention": 0.5,
+          "abort_rate_pct": 7.94,
+          "throughput_tps": 1834.13
+        },
+        {
+          "contention": 0.6,
+          "abort_rate_pct": 9.72,
+          "throughput_tps": 1785.93
+        },
+        {
+          "contention": 0.7,
+          "abort_rate_pct": 12.08,
+          "throughput_tps": 1739.47
+        },
+        {
+          "contention": 0.8,
+          "abort_rate_pct": 16.59,
+          "throughput_tps": 1686.8
+        },
+        {
+          "contention": 0.85,
+          "abort_rate_pct": 20.05,
+          "throughput_tps": 1587.67
+        },
+        {
+          "contention": 0.9,
+          "abort_rate_pct": 25.69,
+          "throughput_tps": 1494.93
+        },
+        {
+          "contention": 0.913,
+          "abort_rate_pct": 27.65,
+          "throughput_tps": 1439.87
+        },
+        {
+          "contention": 0.95,
+          "abort_rate_pct": 36.67,
+          "throughput_tps": 1272.93
+        }
+      ]
+    }
+  },
+  "traces": {
+    "tpl_random": {
+      "segments": [
+        {
+          "txn": 2024,
+          "kind": "cpu",
+          "start": 1000.776,
+          "end": 1002.03
+        },
+        {
+          "txn": 2024,
+          "kind": "cpu",
+          "start": 1002.03,
+          "end": 1002.034
+        },
+        {
+          "txn": 2024,
+          "kind": "cpu",
+          "start": 1002.034,
+          "end": 1002.269
+        },
+        {
+          "txn": 2032,
+          "kind": "cpu",
+          "start": 1004.676,
+          "end": 1005.275
+        },
+        {
+          "txn": 2032,
+          "kind": "cpu",
+          "start": 1005.275,
+          "end": 1005.427
+        },
+        {
+          "txn": 2040,
+          "kind": "cpu",
+          "start": 1009.168,
+          "end": 1009.751
+        },
+        {
+          "txn": 2040,
+          "kind": "cpu",
+          "start": 1009.751,
+          "end": 1009.759
+        },
+        {
+          "txn": 2048,
+          "kind": "cpu",
+          "start": 1011.58,
+          "end": 1011.682
+        },
+        {
+          "txn": 2048,
+          "kind": "cpu",
+          "start": 1011.682,
+          "end": 1011.684
+        },
+        {
+          "txn": 2048,
+          "kind": "cpu",
+          "start": 1011.684,
+          "end": 1012.394
+        },
+        {
+          "txn": 2056,
+          "kind": "cpu",
+          "start": 1015.656,
+          "end": 1015.735
+        },
+        {
+          "txn": 2056,
+          "kind": "preempt_penalty",
+          "start": 1015.735,
+          "end": 1016.449
+        },
+        {
+          "txn": 2056,
+          "kind": "cpu",
+          "start": 1016.449,
+          "end": 1016.547
+        },
+        {
+          "txn": 2056,
+          "kind": "cpu",
+          "start": 1016.547,
+          "end": 1016.77
+        },
+        {
+          "txn": 2056,
+          "kind": "cpu",
+          "start": 1016.77,
+          "end": 1017.027
+        },
+        {
+          "txn": 2056,
+          "kind": "cpu",
+          "start": 1017.027,
+          "end": 1017.285
+        },
+        {
+          "txn": 2056,
+          "kind": "cpu",
+          "start": 1017.285,
+          "end": 1017.807
+        },
+        {
+          "txn": 2056,
+          "kind": "cpu",
+          "start": 1017.807,
+          "end": 1017.89
+        },
+        {
+          "txn": 2064,
+          "kind": "cpu",
+          "start": 1018.12,
+          "end": 1018.474
+        },
+        {
+          "txn": 2064,
+          "kind": "cpu",
+          "start": 1018.474,
+          "end": 1019.9
+        },
+        {
+          "txn": 2064,
+          "kind": "cpu",
+          "start": 1019.9,
+          "end": 1020.098
+        },
+        {
+          "txn": 2064,
+          "kind": "cpu",
+          "start": 1020.098,
+          "end": 1020.283
+        },
+        {
+          "txn": 2064,
+          "kind": "cpu",
+          "start": 1020.283,
+          "end": 1020.468
+        },
+        {
+          "txn": 2064,
+          "kind": "cpu",
+          "start": 1020.468,
+          "end": 1020.547
+        },
+        {
+          "txn": 2072,
+          "kind": "cpu",
+          "start": 1021.871,
+          "end": 1021.984
+        },
+        {
+          "txn": 2072,
+          "kind": "cpu",
+          "start": 1021.984,
+          "end": 1023.693
+        },
+        {
+          "txn": 2072,
+          "kind": "cpu",
+          "start": 1023.693,
+          "end": 1023.805
+        },
+        {
+          "txn": 2072,
+          "kind": "cpu",
+          "start": 1023.805,
+          "end": 1023.964
+        },
+        {
+          "txn": 2072,
+          "kind": "cpu",
+          "start": 1023.964,
+          "end": 1024.243
+        },
+        {
+          "txn": 2080,
+          "kind": "cpu",
+          "start": 1024.243,
+          "end": 1024.303
+        },
+        {
+          "txn": 2080,
+          "kind": "lock_wait",
+          "start": 1024.303,
+          "end": 1024.767,
+          "key": 211
+        },
+        {
+          "txn": 2080,
+          "kind": "cpu",
+          "start": 1024.767,
+          "end": 1024.879
+        },
+        {
+          "txn": 2080,
+          "kind": "cpu",
+          "start": 1024.879,
+          "end": 1024.915
+        },
+        {
+          "txn": 2080,
+          "kind": "cpu",
+          "start": 1024.915,
+          "end": 1025.078
+        },
+        {
+          "txn": 2080,
+          "kind": "cpu",
+          "start": 1025.078,
+          "end": 1025.429
+        },
+        {
+          "txn": 2088,
+          "kind": "cpu",
+          "start": 1030.038,
+          "end": 1030.256
+        },
+        {
+          "txn": 2088,
+          "kind": "cpu",
+          "start": 1030.256,
+          "end": 1030.615
+        },
+        {
+          "txn": 2088,
+          "kind": "cpu",
+          "start": 1030.615,
+          "end": 1031.086
+        },
+        {
+          "txn": 2088,
+          "kind": "cpu",
+          "start": 1031.086,
+          "end": 1031.466
+        },
+        {
+          "txn": 2088,
+          "kind": "cpu",
+          "start": 1031.466,
+          "end": 1032.763
+        },
+        {
+          "txn": 2096,
+          "kind": "cpu",
+          "start": 1034.387,
+          "end": 1034.444
+        },
+        {
+          "txn": 2096,
+          "kind": "cpu",
+          "start": 1034.444,
+          "end": 1034.517
+        },
+        {
+          "txn": 2096,
+          "kind": "cpu",
+          "start": 1034.517,
+          "end": 1034.943
+        },
+        {
+          "txn": 2104,
+          "kind": "cpu",
+          "start": 1040.511,
+          "end": 1041.116
+        },
+        {
+          "txn": 2104,
+          "kind": "cpu",
+          "start": 1041.116,
+          "end": 1041.33
+        },
+        {
+          "txn": 2112,
+          "kind": "cpu",
+          "start": 1042.975,
+          "end": 1043.014
+        },
+        {
+          "txn": 2112,
+          "kind": "cpu",
+          "start": 1043.014,
+          "end": 1043.216
+        },
+        {
+          "txn": 2112,
+          "kind": "lock_wait",
+          "start": 1043.216,
+          "end": 1045.406,
+          "key": 369
+        },
+        {
+          "txn": 2112,
+          "kind": "cpu",
+          "start": 1045.406,
+          "end": 1045.485
+        },
+        {
+          "txn": 2120,
+          "kind": "cpu",
+          "start": 1046.925,
+          "end": 1047.211
+        },
+        {
+          "txn": 2120,
+          "kind": "cpu",
+          "start": 1047.211,
+          "end": 1047.248
+        },
+        {
+          "txn": 2120,
+          "kind": "cpu",
+          "start": 1047.248,
+          "end": 1047.58
+        },
+        {
+          "txn": 2120,
+          "kind": "cpu",
+          "start": 1047.58,
+          "end": 1047.92
+        },
+        {
+          "txn": 2120,
+          "kind": "cpu",
+          "start": 1047.92,
+          "end": 1047.956
+        },
+        {
+          "txn": 2120,
+          "kind": "cpu",
+          "start": 1047.956,
+          "end": 1048.099
+        },
+        {
+          "txn": 2128,
+          "kind": "cpu",
+          "start": 1051.231,
+          "end": 1051.504
+        },
+        {
+          "txn": 2128,
+          "kind": "cpu",
+          "start": 1051.504,
+          "end": 1051.889
+        },
+        {
+          "txn": 2128,
+          "kind": "cpu",
+          "start": 1051.889,
+          "end": 1052.085
+        },
+        {
+          "txn": 2136,
+          "kind": "cpu",
+          "start": 1056.155,
+          "end": 1056.742
+        },
+        {
+          "txn": 2136,
+          "kind": "cpu",
+          "start": 1056.742,
+          "end": 1056.807
+        },
+        {
+          "txn": 2144,
+          "kind": "lock_wait",
+          "start": 1059.566,
+          "end": 1061.778,
+          "key": 30
+        },
+        {
+          "txn": 2144,
+          "kind": "cpu",
+          "start": 1061.778,
+          "end": 1062.666
+        },
+        {
+          "txn": 2144,
+          "kind": "cpu",
+          "start": 1062.666,
+          "end": 1062.808
+        },
+        {
+          "txn": 2144,
+          "kind": "cpu",
+          "start": 1062.808,
+          "end": 1063.506
+        },
+        {
+          "txn": 2144,
+          "kind": "cpu",
+          "start": 1063.506,
+          "end": 1063.812
+        },
+        {
+          "txn": 2144,
+          "kind": "cpu",
+          "start": 1063.812,
+          "end": 1063.855
+        },
+        {
+          "txn": 2152,
+          "kind": "cpu",
+          "start": 1067.587,
+          "end": 1067.658
+        },
+        {
+          "txn": 2152,
+          "kind": "cpu",
+          "start": 1067.658,
+          "end": 1068.304
+        },
+        {
+          "txn": 2152,
+          "kind": "cpu",
+          "start": 1068.304,
+          "end": 1068.469
+        },
+        {
+          "txn": 2152,
+          "kind": "cpu",
+          "start": 1068.469,
+          "end": 1068.604
+        },
+        {
+          "txn": 2152,
+          "kind": "cpu",
+          "start": 1068.604,
+          "end": 1068.641
+        },
+        {
+          "txn": 2152,
+          "kind": "preempt_penalty",
+          "start": 1068.641,
+          "end": 1070.038
+        },
+        {
+          "txn": 2152,
+          "kind": "cpu",
+          "start": 1070.038,
+          "end": 1070.048
+        },
+        {
+          "txn": 2152,
+          "kind": "preempt_penalty",
+          "start": 1070.048,
+          "end": 1071.854
+        },
+        {
+          "txn": 2152,
+          "kind": "cpu",
+          "start": 1071.854,
+          "end": 1072.638
+        },
+        {
+          "txn": 2160,
+          "kind": "cpu",
+          "start": 1072.638,
+          "end": 1072.74
+        },
+        {
+          "txn": 2160,
+          "kind": "cpu",
+          "start": 1072.74,
+          "end": 1072.963
+        },
+        {
+          "txn": 2160,
+          "kind": "cpu",
+          "start": 1072.963,
+          "end": 1073.567
+        },
+        {
+          "txn": 2160,
+          "kind": "cpu",
+          "start": 1073.567,
+          "end": 1073.67
+        },
+        {
+          "txn": 2160,
+          "kind": "cpu",
+          "start": 1073.67,
+          "end": 1073.907
+        },
+        {
+          "txn": 2160,
+          "kind": "cpu",
+          "start": 1073.907,
+          "end": 1074.026
+        },
+        {
+          "txn": 2168,
+          "kind": "cpu",
+          "start": 1074.026,
+          "end": 1074.721
+        },
+        {
+          "txn": 2168,
+          "kind": "cpu",
+          "start": 1074.721,
+          "end": 1075.274
+        },
+        {
+          "txn": 2168,
+          "kind": "cpu",
+          "start": 1075.274,
+          "end": 1075.393
+        },
+        {
+          "txn": 2168,
+          "kind": "cpu",
+          "start": 1075.393,
+          "end": 1075.526
+        },
+        {
+          "txn": 2168,
+          "kind": "cpu",
+          "start": 1075.526,
+          "end": 1075.763
+        },
+        {
+          "txn": 2168,
+          "kind": "preempt_penalty",
+          "start": 1075.763,
+          "end": 1076.444
+        },
+        {
+          "txn": 2168,
+          "kind": "cpu",
+          "start": 1076.444,
+          "end": 1077.01
+        },
+        {
+          "txn": 2168,
+          "kind": "cpu",
+          "start": 1077.01,
+          "end": 1077.45
+        },
+        {
+          "txn": 2176,
+          "kind": "cpu",
+          "start": 1077.45,
+          "end": 1078.548
+        },
+        {
+          "txn": 2176,
+          "kind": "cpu",
+          "start": 1078.548,
+          "end": 1079.094
+        },
+        {
+          "txn": 2184,
+          "kind": "cpu",
+          "start": 1079.417,
+          "end": 1079.986
+        },
+        {
+          "txn": 2184,
+          "kind": "cpu",
+          "start": 1079.986,
+          "end": 1080.18
+        },
+        {
+          "txn": 2184,
+          "kind": "cpu",
+          "start": 1080.18,
+          "end": 1080.602
+        },
+        {
+          "txn": 2192,
+          "kind": "cpu",
+          "start": 1081.689,
+          "end": 1082.836
+        },
+        {
+          "txn": 2192,
+          "kind": "cpu",
+          "start": 1082.836,
+          "end": 1083.474
+        },
+        {
+          "txn": 2200,
+          "kind": "cpu",
+          "start": 1085.497,
+          "end": 1085.717
+        },
+        {
+          "txn": 2200,
+          "kind": "cpu",
+          "start": 1085.717,
+          "end": 1085.765
+        },
+        {
+          "txn": 2200,
+          "kind": "cpu",
+          "start": 1085.765,
+          "end": 1085.809
+        },
+        {
+          "txn": 2200,
+          "kind": "cpu",
+          "start": 1085.809,
+          "end": 1086.154
+        },
+        {
+          "txn": 2200,
+          "kind": "cpu",
+          "start": 1086.154,
+          "end": 1086.187
+        },
+        {
+          "txn": 2208,
+          "kind": "cpu",
+          "start": 1090.155,
+          "end": 1090.205
+        },
+        {
+          "txn": 2208,
+          "kind": "cpu",
+          "start": 1090.205,
+          "end": 1090.376
+        },
+        {
+          "txn": 2216,
+          "kind": "cpu",
+          "start": 1094.081,
+          "end": 1094.679
+        },
+        {
+          "txn": 2216,
+          "kind": "cpu",
+          "start": 1094.679,
+          "end": 1094.717
+        },
+        {
+          "txn": 2216,
+          "kind": "cpu",
+          "start": 1094.717,
+          "end": 1095.323
+        },
+        {
+          "txn": 2224,
+          "kind": "cpu",
+          "start": 1101.898,
+          "end": 1101.967
+        },
+        {
+          "txn": 2224,
+          "kind": "cpu",
+          "start": 1101.967,
+          "end": 1102.509
+        },
+        {
+          "txn": 2232,
+          "kind": "cpu",
+          "start": 1105.123,
+          "end": 1105.426
+        },
+        {
+          "txn": 2232,
+          "kind": "cpu",
+          "start": 1105.426,
+          "end": 1105.433
+        },
+        {
+          "txn": 2232,
+          "kind": "cpu",
+          "start": 1105.433,
+          "end": 1105.716
+        },
+        {
+          "txn": 2232,
+          "kind": "cpu",
+          "start": 1105.716,
+          "end": 1105.919
+        },
+        {
+          "txn": 2232,
+          "kind": "cpu",
+          "start": 1105.919,
+          "end": 1106.017
+        },
+        {
+          "txn": 2232,
+          "kind": "cpu",
+          "start": 1106.017,
+          "end": 1106.848
+        },
+        {
+          "txn": 2240,
+          "kind": "cpu",
+          "start": 1108.479,
+          "end": 1108.592
+        },
+        {
+          "txn": 2240,
+          "kind": "cpu",
+          "start": 1108.592,
+          "end": 1108.693
+        },
+        {
+          "txn": 2248,
+          "kind": "cpu",
+          "start": 1112.51,
+          "end": 1113.981
+        },
+        {
+          "txn": 2248,
+          "kind": "cpu",
+          "start": 1113.981,
+          "end": 1114.053
+        },
+        {
+          "txn": 2248,
+          "kind": "cpu",
+          "start": 1114.053,
+          "end": 1114.882
+        },
+        {
+          "txn": 2248,
+          "kind": "cpu",
+          "start": 1114.882,
+          "end": 1114.985
+        },
+        {
+          "txn": 2256,
+          "kind": "cpu",
+          "start": 1115.768,
+          "end": 1116.05
+        },
+        {
+          "txn": 2256,
+          "kind": "cpu",
+          "start": 1116.05,
+          "end": 1116.171
+        },
+        {
+          "txn": 2256,
+          "kind": "cpu",
+          "start": 1116.171,
+          "end": 1116.484
+        },
+        {
+          "txn": 2256,
+          "kind": "cpu",
+          "start": 1116.484,
+          "end": 1117.518
+        },
+        {
+          "txn": 2256,
+          "kind": "cpu",
+          "start": 1117.518,
+          "end": 1117.856
+        },
+        {
+          "txn": 2264,
+          "kind": "cpu",
+          "start": 1119.338,
+          "end": 1119.418
+        },
+        {
+          "txn": 2264,
+          "kind": "cpu",
+          "start": 1119.418,
+          "end": 1119.499
+        },
+        {
+          "txn": 2272,
+          "kind": "cpu",
+          "start": 1123.525,
+          "end": 1124.06
+        },
+        {
+          "txn": 2272,
+          "kind": "cpu",
+          "start": 1124.06,
+          "end": 1124.198
+        },
+        {
+          "txn": 2272,
+          "kind": "cpu",
+          "start": 1124.198,
+          "end": 1124.21
+        },
+        {
+          "txn": 2280,
+          "kind": "cpu",
+          "start": 1128.519,
+          "end": 1128.61
+        },
+        {
+          "txn": 2280,
+          "kind": "cpu",
+          "start": 1128.61,
+          "end": 1128.898
+        },
+        {
+          "txn": 2288,
+          "kind": "cpu",
+          "start": 1131.335,
+          "end": 1131.368
+        },
+        {
+          "txn": 2288,
+          "kind": "cpu",
+          "start": 1131.368,
+          "end": 1131.373
+        },
+        {
+          "txn": 2288,
+          "kind": "cpu",
+          "start": 1131.373,
+          "end": 1131.922
+        },
+        {
+          "txn": 2288,
+          "kind": "cpu",
+          "start": 1131.922,
+          "end": 1132.103
+        },
+        {
+          "txn": 2296,
+          "kind": "cpu",
+          "start": 1133.484,
+          "end": 1133.855
+        },
+        {
+          "txn": 2296,
+          "kind": "cpu",
+          "start": 1133.855,
+          "end": 1134.748
+        },
+        {
+          "txn": 2304,
+          "kind": "cpu",
+          "start": 1136.229,
+          "end": 1136.372
+        },
+        {
+          "txn": 2304,
+          "kind": "cpu",
+          "start": 1136.372,
+          "end": 1136.379
+        },
+        {
+          "txn": 2304,
+          "kind": "cpu",
+          "start": 1136.379,
+          "end": 1136.41
+        },
+        {
+          "txn": 2304,
+          "kind": "preempt_penalty",
+          "start": 1136.41,
+          "end": 1138.121
+        },
+        {
+          "txn": 2304,
+          "kind": "cpu",
+          "start": 1138.121,
+          "end": 1138.381
+        },
+        {
+          "txn": 2304,
+          "kind": "cpu",
+          "start": 1138.381,
+          "end": 1138.696
+        },
+        {
+          "txn": 2312,
+          "kind": "cpu",
+          "start": 1141.52,
+          "end": 1142.046
+        },
+        {
+          "txn": 2312,
+          "kind": "cpu",
+          "start": 1142.046,
+          "end": 1142.056
+        },
+        {
+          "txn": 2320,
+          "kind": "cpu",
+          "start": 1144.845,
+          "end": 1145.239
+        },
+        {
+          "txn": 2320,
+          "kind": "cpu",
+          "start": 1145.328,
+          "end": 1145.807
+        },
+        {
+          "txn": 2320,
+          "kind": "cpu",
+          "start": 1145.807,
+          "end": 1145.95
+        },
+        {
+          "txn": 2320,
+          "kind": "cpu",
+          "start": 1145.95,
+          "end": 1146.23
+        },
+        {
+          "txn": 2328,
+          "kind": "cpu",
+          "start": 1146.918,
+          "end": 1147.375
+        },
+        {
+          "txn": 2328,
+          "kind": "cpu",
+          "start": 1147.375,
+          "end": 1147.445
+        },
+        {
+          "txn": 2328,
+          "kind": "cpu",
+          "start": 1148.168,
+          "end": 1148.403
+        },
+        {
+          "txn": 2328,
+          "kind": "preempt_penalty",
+          "start": 1148.403,
+          "end": 1150
+        }
+      ],
+      "markers": [
+        {
+          "txn": 2024,
+          "event": "commit",
+          "t": 1002.269
+        },
+        {
+          "txn": 2032,
+          "event": "commit",
+          "t": 1005.427
+        },
+        {
+          "txn": 2040,
+          "event": "commit",
+          "t": 1009.759
+        },
+        {
+          "txn": 2048,
+          "event": "commit",
+          "t": 1012.394
+        },
+        {
+          "txn": 2056,
+          "event": "commit",
+          "t": 1017.89
+        },
+        {
+          "txn": 2064,
+          "event": "commit",
+          "t": 1020.547
+        },
+        {
+          "txn": 2072,
+          "event": "commit",
+          "t": 1024.243
+        },
+        {
+          "txn": 2080,
+          "event": "commit",
+          "t": 1025.429
+        },
+        {
+          "txn": 2088,
+          "event": "commit",
+          "t": 1032.763
+        },
+        {
+          "txn": 2096,
+          "event": "commit",
+          "t": 1034.943
+        },
+        {
+          "txn": 2104,
+          "event": "commit",
+          "t": 1041.33
+        },
+        {
+          "txn": 2112,
+          "event": "commit",
+          "t": 1045.485
+        },
+        {
+          "txn": 2120,
+          "event": "commit",
+          "t": 1048.099
+        },
+        {
+          "txn": 2128,
+          "event": "commit",
+          "t": 1052.085
+        },
+        {
+          "txn": 2136,
+          "event": "commit",
+          "t": 1056.807
+        },
+        {
+          "txn": 2144,
+          "event": "commit",
+          "t": 1063.855
+        },
+        {
+          "txn": 2152,
+          "event": "commit",
+          "t": 1072.638
+        },
+        {
+          "txn": 2160,
+          "event": "commit",
+          "t": 1074.026
+        },
+        {
+          "txn": 2168,
+          "event": "commit",
+          "t": 1077.45
+        },
+        {
+          "txn": 2176,
+          "event": "commit",
+          "t": 1079.094
+        },
+        {
+          "txn": 2184,
+          "event": "commit",
+          "t": 1080.602
+        },
+        {
+          "txn": 2192,
+          "event": "commit",
+          "t": 1083.474
+        },
+        {
+          "txn": 2200,
+          "event": "commit",
+          "t": 1086.187
+        },
+        {
+          "txn": 2208,
+          "event": "commit",
+          "t": 1090.376
+        },
+        {
+          "txn": 2216,
+          "event": "commit",
+          "t": 1095.323
+        },
+        {
+          "txn": 2224,
+          "event": "commit",
+          "t": 1102.509
+        },
+        {
+          "txn": 2232,
+          "event": "commit",
+          "t": 1106.848
+        },
+        {
+          "txn": 2240,
+          "event": "commit",
+          "t": 1108.693
+        },
+        {
+          "txn": 2248,
+          "event": "commit",
+          "t": 1114.985
+        },
+        {
+          "txn": 2256,
+          "event": "commit",
+          "t": 1117.856
+        },
+        {
+          "txn": 2264,
+          "event": "commit",
+          "t": 1119.499
+        },
+        {
+          "txn": 2272,
+          "event": "commit",
+          "t": 1124.21
+        },
+        {
+          "txn": 2280,
+          "event": "commit",
+          "t": 1128.898
+        },
+        {
+          "txn": 2288,
+          "event": "commit",
+          "t": 1132.103
+        },
+        {
+          "txn": 2296,
+          "event": "commit",
+          "t": 1134.748
+        },
+        {
+          "txn": 2304,
+          "event": "commit",
+          "t": 1138.696
+        },
+        {
+          "txn": 2312,
+          "event": "commit",
+          "t": 1142.056
+        },
+        {
+          "txn": 2320,
+          "event": "commit",
+          "t": 1146.23
+        }
+      ],
+      "window": [
+        1000,
+        1150
+      ]
+    },
+    "tpl_critical_aware": {
+      "segments": [
+        {
+          "txn": 2032,
+          "kind": "cpu",
+          "start": 1000.636,
+          "end": 1000.692
+        },
+        {
+          "txn": 2032,
+          "kind": "cpu",
+          "start": 1000.692,
+          "end": 1000.994
+        },
+        {
+          "txn": 2040,
+          "kind": "cpu",
+          "start": 1003.803,
+          "end": 1003.922
+        },
+        {
+          "txn": 2040,
+          "kind": "cpu",
+          "start": 1003.922,
+          "end": 1003.992
+        },
+        {
+          "txn": 2040,
+          "kind": "cpu",
+          "start": 1003.992,
+          "end": 1004.832
+        },
+        {
+          "txn": 2040,
+          "kind": "cpu",
+          "start": 1004.832,
+          "end": 1004.882
+        },
+        {
+          "txn": 2048,
+          "kind": "cpu",
+          "start": 1005.7,
+          "end": 1006.006
+        },
+        {
+          "txn": 2048,
+          "kind": "cpu",
+          "start": 1006.006,
+          "end": 1006.045
+        },
+        {
+          "txn": 2056,
+          "kind": "cpu",
+          "start": 1010.913,
+          "end": 1011.707
+        },
+        {
+          "txn": 2056,
+          "kind": "cpu",
+          "start": 1011.707,
+          "end": 1011.755
+        },
+        {
+          "txn": 2064,
+          "kind": "lock_wait",
+          "start": 1014.895,
+          "end": 1015.153,
+          "key": 181
+        },
+        {
+          "txn": 2064,
+          "kind": "cpu",
+          "start": 1015.153,
+          "end": 1015.197
+        },
+        {
+          "txn": 2064,
+          "kind": "lock_wait",
+          "start": 1015.197,
+          "end": 1015.527,
+          "key": 407
+        },
+        {
+          "txn": 2064,
+          "kind": "cpu",
+          "start": 1015.527,
+          "end": 1015.596
+        },
+        {
+          "txn": 2064,
+          "kind": "cpu",
+          "start": 1015.596,
+          "end": 1016.517
+        },
+        {
+          "txn": 2064,
+          "kind": "cpu",
+          "start": 1016.517,
+          "end": 1017.05
+        },
+        {
+          "txn": 2064,
+          "kind": "cpu",
+          "start": 1017.05,
+          "end": 1017.447
+        },
+        {
+          "txn": 2064,
+          "kind": "cpu",
+          "start": 1017.447,
+          "end": 1017.973
+        },
+        {
+          "txn": 2072,
+          "kind": "cpu",
+          "start": 1017.973,
+          "end": 1018.101
+        },
+        {
+          "txn": 2072,
+          "kind": "cpu",
+          "start": 1018.101,
+          "end": 1018.336
+        },
+        {
+          "txn": 2072,
+          "kind": "cpu",
+          "start": 1018.336,
+          "end": 1018.721
+        },
+        {
+          "txn": 2072,
+          "kind": "cpu",
+          "start": 1018.721,
+          "end": 1018.729
+        },
+        {
+          "txn": 2072,
+          "kind": "cpu",
+          "start": 1018.729,
+          "end": 1018.731
+        },
+        {
+          "txn": 2080,
+          "kind": "cpu",
+          "start": 1020.706,
+          "end": 1020.852
+        },
+        {
+          "txn": 2080,
+          "kind": "cpu",
+          "start": 1020.852,
+          "end": 1021.238
+        },
+        {
+          "txn": 2080,
+          "kind": "cpu",
+          "start": 1021.238,
+          "end": 1021.56
+        },
+        {
+          "txn": 2080,
+          "kind": "cpu",
+          "start": 1021.56,
+          "end": 1021.566
+        },
+        {
+          "txn": 2080,
+          "kind": "cpu",
+          "start": 1021.566,
+          "end": 1022.604
+        },
+        {
+          "txn": 2080,
+          "kind": "cpu",
+          "start": 1022.604,
+          "end": 1024.145
+        },
+        {
+          "txn": 2088,
+          "kind": "cpu",
+          "start": 1024.599,
+          "end": 1024.974
+        },
+        {
+          "txn": 2088,
+          "kind": "cpu",
+          "start": 1024.974,
+          "end": 1025.496
+        },
+        {
+          "txn": 2088,
+          "kind": "cpu",
+          "start": 1025.496,
+          "end": 1026.037
+        },
+        {
+          "txn": 2088,
+          "kind": "cpu",
+          "start": 1026.037,
+          "end": 1026.258
+        },
+        {
+          "txn": 2088,
+          "kind": "cpu",
+          "start": 1026.258,
+          "end": 1026.784
+        },
+        {
+          "txn": 2096,
+          "kind": "cpu",
+          "start": 1028.032,
+          "end": 1028.209
+        },
+        {
+          "txn": 2096,
+          "kind": "cpu",
+          "start": 1028.209,
+          "end": 1028.298
+        },
+        {
+          "txn": 2096,
+          "kind": "cpu",
+          "start": 1028.298,
+          "end": 1028.434
+        },
+        {
+          "txn": 2096,
+          "kind": "cpu",
+          "start": 1028.434,
+          "end": 1028.74
+        },
+        {
+          "txn": 2096,
+          "kind": "cpu",
+          "start": 1028.74,
+          "end": 1029.153
+        },
+        {
+          "txn": 2096,
+          "kind": "cpu",
+          "start": 1029.153,
+          "end": 1030.726
+        },
+        {
+          "txn": 2104,
+          "kind": "cpu",
+          "start": 1031.348,
+          "end": 1031.355
+        },
+        {
+          "txn": 2104,
+          "kind": "cpu",
+          "start": 1031.355,
+          "end": 1032.3
+        },
+        {
+          "txn": 2104,
+          "kind": "cpu",
+          "start": 1032.3,
+          "end": 1032.441
+        },
+        {
+          "txn": 2104,
+          "kind": "cpu",
+          "start": 1032.441,
+          "end": 1033.279
+        },
+        {
+          "txn": 2104,
+          "kind": "cpu",
+          "start": 1033.279,
+          "end": 1033.59
+        },
+        {
+          "txn": 2104,
+          "kind": "cpu",
+          "start": 1033.59,
+          "end": 1034.418
+        },
+        {
+          "txn": 2112,
+          "kind": "cpu",
+          "start": 1035.634,
+          "end": 1035.654
+        },
+        {
+          "txn": 2112,
+          "kind": "cpu",
+          "start": 1035.654,
+          "end": 1035.805
+        },
+        {
+          "txn": 2112,
+          "kind": "cpu",
+          "start": 1035.805,
+          "end": 1036.027
+        },
+        {
+          "txn": 2112,
+          "kind": "cpu",
+          "start": 1036.027,
+          "end": 1036.247
+        },
+        {
+          "txn": 2112,
+          "kind": "cpu",
+          "start": 1036.247,
+          "end": 1037.546
+        },
+        {
+          "txn": 2112,
+          "kind": "cpu",
+          "start": 1037.546,
+          "end": 1037.579
+        },
+        {
+          "txn": 2120,
+          "kind": "cpu",
+          "start": 1038.166,
+          "end": 1038.604
+        },
+        {
+          "txn": 2120,
+          "kind": "cpu",
+          "start": 1038.604,
+          "end": 1038.792
+        },
+        {
+          "txn": 2120,
+          "kind": "cpu",
+          "start": 1038.792,
+          "end": 1039.128
+        },
+        {
+          "txn": 2120,
+          "kind": "cpu",
+          "start": 1039.128,
+          "end": 1039.177
+        },
+        {
+          "txn": 2120,
+          "kind": "cpu",
+          "start": 1039.177,
+          "end": 1039.368
+        },
+        {
+          "txn": 2128,
+          "kind": "cpu",
+          "start": 1042.94,
+          "end": 1043.016
+        },
+        {
+          "txn": 2128,
+          "kind": "cpu",
+          "start": 1043.016,
+          "end": 1044.131
+        },
+        {
+          "txn": 2136,
+          "kind": "cpu",
+          "start": 1047.734,
+          "end": 1047.859
+        },
+        {
+          "txn": 2136,
+          "kind": "cpu",
+          "start": 1047.859,
+          "end": 1047.991
+        },
+        {
+          "txn": 2136,
+          "kind": "cpu",
+          "start": 1047.991,
+          "end": 1047.999
+        },
+        {
+          "txn": 2136,
+          "kind": "cpu",
+          "start": 1047.999,
+          "end": 1048.49
+        },
+        {
+          "txn": 2144,
+          "kind": "cpu",
+          "start": 1049.689,
+          "end": 1050.051
+        },
+        {
+          "txn": 2144,
+          "kind": "cpu",
+          "start": 1050.051,
+          "end": 1050.264
+        },
+        {
+          "txn": 2144,
+          "kind": "cpu",
+          "start": 1050.264,
+          "end": 1050.323
+        },
+        {
+          "txn": 2152,
+          "kind": "cpu",
+          "start": 1053.987,
+          "end": 1054.436
+        },
+        {
+          "txn": 2152,
+          "kind": "cpu",
+          "start": 1054.436,
+          "end": 1054.588
+        },
+        {
+          "txn": 2152,
+          "kind": "cpu",
+          "start": 1054.588,
+          "end": 1054.69
+        },
+        {
+          "txn": 2152,
+          "kind": "cpu",
+          "start": 1054.69,
+          "end": 1055.112
+        },
+        {
+          "txn": 2152,
+          "kind": "cpu",
+          "start": 1055.112,
+          "end": 1055.814
+        },
+        {
+          "txn": 2160,
+          "kind": "cpu",
+          "start": 1057.089,
+          "end": 1057.623
+        },
+        {
+          "txn": 2160,
+          "kind": "cpu",
+          "start": 1057.623,
+          "end": 1057.754
+        },
+        {
+          "txn": 2160,
+          "kind": "cpu",
+          "start": 1057.754,
+          "end": 1057.879
+        },
+        {
+          "txn": 2160,
+          "kind": "cpu",
+          "start": 1057.879,
+          "end": 1058.22
+        },
+        {
+          "txn": 2168,
+          "kind": "cpu",
+          "start": 1060.955,
+          "end": 1061.494
+        },
+        {
+          "txn": 2168,
+          "kind": "cpu",
+          "start": 1061.494,
+          "end": 1061.636
+        },
+        {
+          "txn": 2168,
+          "kind": "cpu",
+          "start": 1061.636,
+          "end": 1061.756
+        },
+        {
+          "txn": 2168,
+          "kind": "cpu",
+          "start": 1061.756,
+          "end": 1061.868
+        },
+        {
+          "txn": 2168,
+          "kind": "cpu",
+          "start": 1061.868,
+          "end": 1061.889
+        },
+        {
+          "txn": 2168,
+          "kind": "cpu",
+          "start": 1061.889,
+          "end": 1062.906
+        },
+        {
+          "txn": 2176,
+          "kind": "cpu",
+          "start": 1066.006,
+          "end": 1067.029
+        },
+        {
+          "txn": 2176,
+          "kind": "cpu",
+          "start": 1067.029,
+          "end": 1067.036
+        },
+        {
+          "txn": 2176,
+          "kind": "cpu",
+          "start": 1067.036,
+          "end": 1067.176
+        },
+        {
+          "txn": 2184,
+          "kind": "cpu",
+          "start": 1068.91,
+          "end": 1069.336
+        },
+        {
+          "txn": 2184,
+          "kind": "cpu",
+          "start": 1069.336,
+          "end": 1070.314
+        },
+        {
+          "txn": 2184,
+          "kind": "cpu",
+          "start": 1070.314,
+          "end": 1070.386
+        },
+        {
+          "txn": 2184,
+          "kind": "cpu",
+          "start": 1070.386,
+          "end": 1070.429
+        },
+        {
+          "txn": 2184,
+          "kind": "cpu",
+          "start": 1070.429,
+          "end": 1071.128
+        },
+        {
+          "txn": 2192,
+          "kind": "cpu",
+          "start": 1071.128,
+          "end": 1071.38
+        },
+        {
+          "txn": 2192,
+          "kind": "cpu",
+          "start": 1071.38,
+          "end": 1072.459
+        },
+        {
+          "txn": 2192,
+          "kind": "cpu",
+          "start": 1072.459,
+          "end": 1072.995
+        },
+        {
+          "txn": 2192,
+          "kind": "cpu",
+          "start": 1072.995,
+          "end": 1073.267
+        },
+        {
+          "txn": 2192,
+          "kind": "cpu",
+          "start": 1073.267,
+          "end": 1073.369
+        },
+        {
+          "txn": 2192,
+          "kind": "cpu",
+          "start": 1073.369,
+          "end": 1073.991
+        },
+        {
+          "txn": 2200,
+          "kind": "cpu",
+          "start": 1073.991,
+          "end": 1074.14
+        },
+        {
+          "txn": 2200,
+          "kind": "cpu",
+          "start": 1074.14,
+          "end": 1074.271
+        },
+        {
+          "txn": 2200,
+          "kind": "cpu",
+          "start": 1074.271,
+          "end": 1074.919
+        },
+        {
+          "txn": 2208,
+          "kind": "cpu",
+          "start": 1079.698,
+          "end": 1080.019
+        },
+        {
+          "txn": 2208,
+          "kind": "cpu",
+          "start": 1080.019,
+          "end": 1080.623
+        },
+        {
+          "txn": 2216,
+          "kind": "cpu",
+          "start": 1084.978,
+          "end": 1085.097
+        },
+        {
+          "txn": 2216,
+          "kind": "cpu",
+          "start": 1085.097,
+          "end": 1085.23
+        },
+        {
+          "txn": 2216,
+          "kind": "cpu",
+          "start": 1085.23,
+          "end": 1085.234
+        },
+        {
+          "txn": 2216,
+          "kind": "cpu",
+          "start": 1085.234,
+          "end": 1086.21
+        },
+        {
+          "txn": 2224,
+          "kind": "cpu",
+          "start": 1088.15,
+          "end": 1088.336
+        },
+        {
+          "txn": 2224,
+          "kind": "cpu",
+          "start": 1088.336,
+          "end": 1088.667
+        },
+        {
+          "txn": 2224,
+          "kind": "cpu",
+          "start": 1088.667,
+          "end": 1088.787
+        },
+        {
+          "txn": 2224,
+          "kind": "cpu",
+          "start": 1088.787,
+          "end": 1088.976
+        },
+        {
+          "txn": 2224,
+          "kind": "cpu",
+          "start": 1088.976,
+          "end": 1089.341
+        },
+        {
+          "txn": 2232,
+          "kind": "cpu",
+          "start": 1090.556,
+          "end": 1091.448
+        },
+        {
+          "txn": 2232,
+          "kind": "cpu",
+          "start": 1091.448,
+          "end": 1091.625
+        },
+        {
+          "txn": 2232,
+          "kind": "cpu",
+          "start": 1091.625,
+          "end": 1091.745
+        },
+        {
+          "txn": 2240,
+          "kind": "cpu",
+          "start": 1091.957,
+          "end": 1092.123
+        },
+        {
+          "txn": 2240,
+          "kind": "cpu",
+          "start": 1092.123,
+          "end": 1092.203
+        },
+        {
+          "txn": 2240,
+          "kind": "cpu",
+          "start": 1092.203,
+          "end": 1092.297
+        },
+        {
+          "txn": 2240,
+          "kind": "cpu",
+          "start": 1092.297,
+          "end": 1092.374
+        },
+        {
+          "txn": 2240,
+          "kind": "cpu",
+          "start": 1092.374,
+          "end": 1092.637
+        },
+        {
+          "txn": 2248,
+          "kind": "cpu",
+          "start": 1095.123,
+          "end": 1096.666
+        },
+        {
+          "txn": 2248,
+          "kind": "cpu",
+          "start": 1096.666,
+          "end": 1096.978
+        },
+        {
+          "txn": 2248,
+          "kind": "cpu",
+          "start": 1096.978,
+          "end": 1097.031
+        },
+        {
+          "txn": 2248,
+          "kind": "cpu",
+          "start": 1097.031,
+          "end": 1097.256
+        },
+        {
+          "txn": 2248,
+          "kind": "cpu",
+          "start": 1097.256,
+          "end": 1097.611
+        },
+        {
+          "txn": 2256,
+          "kind": "cpu",
+          "start": 1098.934,
+          "end": 1099.054
+        },
+        {
+          "txn": 2256,
+          "kind": "cpu",
+          "start": 1099.054,
+          "end": 1099.393
+        },
+        {
+          "txn": 2256,
+          "kind": "cpu",
+          "start": 1099.393,
+          "end": 1099.741
+        },
+        {
+          "txn": 2264,
+          "kind": "cpu",
+          "start": 1102.398,
+          "end": 1102.478
+        },
+        {
+          "txn": 2264,
+          "kind": "cpu",
+          "start": 1102.478,
+          "end": 1102.714
+        },
+        {
+          "txn": 2264,
+          "kind": "cpu",
+          "start": 1102.714,
+          "end": 1103.227
+        },
+        {
+          "txn": 2264,
+          "kind": "cpu",
+          "start": 1103.227,
+          "end": 1103.889
+        },
+        {
+          "txn": 2264,
+          "kind": "cpu",
+          "start": 1103.889,
+          "end": 1103.893
+        },
+        {
+          "txn": 2272,
+          "kind": "cpu",
+          "start": 1105.936,
+          "end": 1106.292
+        },
+        {
+          "txn": 2272,
+          "kind": "cpu",
+          "start": 1106.292,
+          "end": 1106.429
+        },
+        {
+          "txn": 2272,
+          "kind": "cpu",
+          "start": 1106.429,
+          "end": 1106.452
+        },
+        {
+          "txn": 2280,
+          "kind": "cpu",
+          "start": 1110.385,
+          "end": 1110.619
+        },
+        {
+          "txn": 2280,
+          "kind": "cpu",
+          "start": 1110.619,
+          "end": 1110.741
+        },
+        {
+          "txn": 2280,
+          "kind": "cpu",
+          "start": 1110.741,
+          "end": 1111.472
+        },
+        {
+          "txn": 2280,
+          "kind": "cpu",
+          "start": 1111.472,
+          "end": 1112.667
+        },
+        {
+          "txn": 2280,
+          "kind": "cpu",
+          "start": 1112.667,
+          "end": 1112.709
+        },
+        {
+          "txn": 2280,
+          "kind": "cpu",
+          "start": 1112.709,
+          "end": 1112.881
+        },
+        {
+          "txn": 2288,
+          "kind": "cpu",
+          "start": 1112.881,
+          "end": 1113.781
+        },
+        {
+          "txn": 2288,
+          "kind": "cpu",
+          "start": 1113.781,
+          "end": 1114.172
+        },
+        {
+          "txn": 2288,
+          "kind": "cpu",
+          "start": 1114.172,
+          "end": 1114.408
+        },
+        {
+          "txn": 2296,
+          "kind": "cpu",
+          "start": 1115.387,
+          "end": 1116.255
+        },
+        {
+          "txn": 2296,
+          "kind": "cpu",
+          "start": 1116.255,
+          "end": 1116.567
+        },
+        {
+          "txn": 2296,
+          "kind": "cpu",
+          "start": 1116.567,
+          "end": 1117.177
+        },
+        {
+          "txn": 2304,
+          "kind": "cpu",
+          "start": 1117.25,
+          "end": 1118.747
+        },
+        {
+          "txn": 2304,
+          "kind": "cpu",
+          "start": 1118.747,
+          "end": 1119.221
+        },
+        {
+          "txn": 2304,
+          "kind": "cpu",
+          "start": 1119.221,
+          "end": 1119.536
+        },
+        {
+          "txn": 2304,
+          "kind": "cpu",
+          "start": 1119.536,
+          "end": 1120.605
+        },
+        {
+          "txn": 2304,
+          "kind": "cpu",
+          "start": 1120.605,
+          "end": 1120.822
+        },
+        {
+          "txn": 2312,
+          "kind": "cpu",
+          "start": 1120.822,
+          "end": 1120.86
+        },
+        {
+          "txn": 2312,
+          "kind": "cpu",
+          "start": 1120.86,
+          "end": 1120.982
+        },
+        {
+          "txn": 2312,
+          "kind": "cpu",
+          "start": 1120.982,
+          "end": 1121.12
+        },
+        {
+          "txn": 2320,
+          "kind": "cpu",
+          "start": 1124.2,
+          "end": 1124.5
+        },
+        {
+          "txn": 2320,
+          "kind": "cpu",
+          "start": 1124.5,
+          "end": 1125.069
+        },
+        {
+          "txn": 2328,
+          "kind": "cpu",
+          "start": 1126.357,
+          "end": 1126.414
+        },
+        {
+          "txn": 2328,
+          "kind": "cpu",
+          "start": 1126.414,
+          "end": 1126.658
+        },
+        {
+          "txn": 2328,
+          "kind": "cpu",
+          "start": 1126.658,
+          "end": 1127.104
+        },
+        {
+          "txn": 2328,
+          "kind": "cpu",
+          "start": 1127.104,
+          "end": 1127.37
+        },
+        {
+          "txn": 2328,
+          "kind": "cpu",
+          "start": 1127.37,
+          "end": 1127.798
+        },
+        {
+          "txn": 2336,
+          "kind": "cpu",
+          "start": 1132.128,
+          "end": 1132.315
+        },
+        {
+          "txn": 2336,
+          "kind": "cpu",
+          "start": 1132.315,
+          "end": 1132.993
+        },
+        {
+          "txn": 2336,
+          "kind": "cpu",
+          "start": 1132.993,
+          "end": 1133.291
+        },
+        {
+          "txn": 2336,
+          "kind": "cpu",
+          "start": 1133.291,
+          "end": 1134.591
+        },
+        {
+          "txn": 2336,
+          "kind": "cpu",
+          "start": 1134.591,
+          "end": 1135.126
+        },
+        {
+          "txn": 2336,
+          "kind": "cpu",
+          "start": 1135.126,
+          "end": 1135.655
+        },
+        {
+          "txn": 2344,
+          "kind": "cpu",
+          "start": 1137.0,
+          "end": 1138.152
+        },
+        {
+          "txn": 2344,
+          "kind": "cpu",
+          "start": 1138.152,
+          "end": 1138.63
+        },
+        {
+          "txn": 2344,
+          "kind": "cpu",
+          "start": 1138.63,
+          "end": 1138.683
+        },
+        {
+          "txn": 2344,
+          "kind": "cpu",
+          "start": 1138.683,
+          "end": 1139.81
+        },
+        {
+          "txn": 2344,
+          "kind": "cpu",
+          "start": 1139.81,
+          "end": 1141.339
+        },
+        {
+          "txn": 2352,
+          "kind": "cpu",
+          "start": 1141.339,
+          "end": 1141.403
+        },
+        {
+          "txn": 2352,
+          "kind": "cpu",
+          "start": 1141.403,
+          "end": 1141.565
+        },
+        {
+          "txn": 2352,
+          "kind": "cpu",
+          "start": 1141.565,
+          "end": 1141.954
+        },
+        {
+          "txn": 2352,
+          "kind": "cpu",
+          "start": 1141.954,
+          "end": 1142.319
+        },
+        {
+          "txn": 2360,
+          "kind": "cpu",
+          "start": 1144.739,
+          "end": 1146.037
+        },
+        {
+          "txn": 2360,
+          "kind": "cpu",
+          "start": 1146.037,
+          "end": 1146.151
+        },
+        {
+          "txn": 2360,
+          "kind": "cpu",
+          "start": 1146.151,
+          "end": 1146.344
+        },
+        {
+          "txn": 2360,
+          "kind": "cpu",
+          "start": 1146.344,
+          "end": 1147.332
+        },
+        {
+          "txn": 2368,
+          "kind": "cpu",
+          "start": 1147.365,
+          "end": 1147.74
+        },
+        {
+          "txn": 2368,
+          "kind": "cpu",
+          "start": 1147.74,
+          "end": 1147.933
+        },
+        {
+          "txn": 2368,
+          "kind": "cpu",
+          "start": 1147.933,
+          "end": 1149.011
+        }
+      ],
+      "markers": [
+        {
+          "txn": 2032,
+          "event": "commit",
+          "t": 1000.994
+        },
+        {
+          "txn": 2040,
+          "event": "commit",
+          "t": 1004.882
+        },
+        {
+          "txn": 2048,
+          "event": "commit",
+          "t": 1006.045
+        },
+        {
+          "txn": 2056,
+          "event": "commit",
+          "t": 1011.755
+        },
+        {
+          "txn": 2064,
+          "event": "commit",
+          "t": 1017.973
+        },
+        {
+          "txn": 2072,
+          "event": "commit",
+          "t": 1018.731
+        },
+        {
+          "txn": 2080,
+          "event": "commit",
+          "t": 1024.145
+        },
+        {
+          "txn": 2088,
+          "event": "commit",
+          "t": 1026.784
+        },
+        {
+          "txn": 2096,
+          "event": "commit",
+          "t": 1030.726
+        },
+        {
+          "txn": 2104,
+          "event": "commit",
+          "t": 1034.418
+        },
+        {
+          "txn": 2112,
+          "event": "commit",
+          "t": 1037.579
+        },
+        {
+          "txn": 2120,
+          "event": "commit",
+          "t": 1039.368
+        },
+        {
+          "txn": 2128,
+          "event": "commit",
+          "t": 1044.131
+        },
+        {
+          "txn": 2136,
+          "event": "commit",
+          "t": 1048.49
+        },
+        {
+          "txn": 2144,
+          "event": "commit",
+          "t": 1050.323
+        },
+        {
+          "txn": 2152,
+          "event": "commit",
+          "t": 1055.814
+        },
+        {
+          "txn": 2160,
+          "event": "commit",
+          "t": 1058.22
+        },
+        {
+          "txn": 2168,
+          "event": "commit",
+          "t": 1062.906
+        },
+        {
+          "txn": 2176,
+          "event": "commit",
+          "t": 1067.176
+        },
+        {
+          "txn": 2184,
+          "event": "commit",
+          "t": 1071.128
+        },
+        {
+          "txn": 2192,
+          "event": "commit",
+          "t": 1073.991
+        },
+        {
+          "txn": 2200,
+          "event": "commit",
+          "t": 1074.919
+        },
+        {
+          "txn": 2208,
+          "event": "commit",
+          "t": 1080.623
+        },
+        {
+          "txn": 2216,
+          "event": "commit",
+          "t": 1086.21
+        },
+        {
+          "txn": 2224,
+          "event": "commit",
+          "t": 1089.341
+        },
+        {
+          "txn": 2232,
+          "event": "commit",
+          "t": 1091.745
+        },
+        {
+          "txn": 2240,
+          "event": "commit",
+          "t": 1092.637
+        },
+        {
+          "txn": 2248,
+          "event": "commit",
+          "t": 1097.611
+        },
+        {
+          "txn": 2256,
+          "event": "commit",
+          "t": 1099.741
+        },
+        {
+          "txn": 2264,
+          "event": "commit",
+          "t": 1103.893
+        },
+        {
+          "txn": 2272,
+          "event": "commit",
+          "t": 1106.452
+        },
+        {
+          "txn": 2280,
+          "event": "commit",
+          "t": 1112.881
+        },
+        {
+          "txn": 2288,
+          "event": "commit",
+          "t": 1114.408
+        },
+        {
+          "txn": 2296,
+          "event": "commit",
+          "t": 1117.177
+        },
+        {
+          "txn": 2304,
+          "event": "commit",
+          "t": 1120.822
+        },
+        {
+          "txn": 2312,
+          "event": "commit",
+          "t": 1121.12
+        },
+        {
+          "txn": 2320,
+          "event": "commit",
+          "t": 1125.069
+        },
+        {
+          "txn": 2328,
+          "event": "commit",
+          "t": 1127.798
+        },
+        {
+          "txn": 2336,
+          "event": "commit",
+          "t": 1135.655
+        },
+        {
+          "txn": 2344,
+          "event": "commit",
+          "t": 1141.339
+        },
+        {
+          "txn": 2352,
+          "event": "commit",
+          "t": 1142.319
+        },
+        {
+          "txn": 2360,
+          "event": "commit",
+          "t": 1147.332
+        },
+        {
+          "txn": 2368,
+          "event": "commit",
+          "t": 1149.011
+        }
+      ],
+      "window": [
+        1000,
+        1150
+      ]
+    }
+  }
+}

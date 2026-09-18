@@ -9,6 +9,8 @@ import TimelineSection from './components/timeline/TimelineSection'
 import ExperimentBuilder from './components/experiment/ExperimentBuilder'
 import ExportPanel from './components/export/ExportPanel'
 import ReproducePanel from './components/export/ReproducePanel'
+import FirstRunTour from './components/onboarding/FirstRunTour'
+import Documentation from './components/docs/Documentation'
 import { compare, fetchConfigDefaults, fetchPolicies, fetchTemplates } from './api'
 import { SimulateError, type ApiError, type CompareResponse, type Config, type PolicyInfo, type Protocol, type Template } from './types'
 import { checkReproduction, type ReproductionCheck, type RunRecordV1 } from './export'
@@ -16,6 +18,7 @@ import './App.css'
 
 const STORAGE_KEY = 'simdb-preempt:editor-source'
 const STORAGE_TEMPLATE_KEY = 'simdb-preempt:editor-template'
+const STORAGE_TOUR_SEEN_KEY = 'simdb-preempt:tour-seen'
 const MAX_HISTORY = 10
 
 type ProtocolChoice = Protocol | 'both'
@@ -48,6 +51,9 @@ export default function App() {
   const [runs, setRuns] = useState<RunBatch>([])
   const [history, setHistory] = useState<HistoryEntry[]>([])
   const [viewingHistoryId, setViewingHistoryId] = useState<string | null>(null)
+
+  const [tourOpen, setTourOpen] = useState<boolean>(() => !localStorage.getItem(STORAGE_TOUR_SEEN_KEY))
+  const [docsOpen, setDocsOpen] = useState(false)
 
   useEffect(() => {
     fetchTemplates().then((ts) => {
@@ -175,6 +181,25 @@ export default function App() {
     return checkReproduction(record, reproduced)
   }
 
+  function closeTour() {
+    localStorage.setItem(STORAGE_TOUR_SEEN_KEY, '1')
+    setTourOpen(false)
+  }
+
+  function handleTryCriticalAwareExample() {
+    const template = templates.find((t) => t.key === 'critical_aware')
+    setTemplateKey('critical_aware')
+    setProtocolChoice('2pl')
+    setSelectedBaselines(new Set(['none', 'random', 'critical_aware']))
+    setIncludeMyAlgorithm(true)
+    setOverrides({})
+    closeTour()
+    if (template) {
+      setSource(template.source)
+      executeRun(['2pl'], ['none', 'random', 'critical_aware'], template.source, {}, '2pl')
+    }
+  }
+
   function viewHistoryEntry(entry: HistoryEntry) {
     setRuns(entry.runs)
     setViewingHistoryId(entry.id)
@@ -189,7 +214,13 @@ export default function App() {
         <div className="kicker mono">
           simdb-preempt <span>/</span> simulation lab
         </div>
-        <h1>Build your scheduler</h1>
+        <div className="app-header-row">
+          <h1>Build your scheduler</h1>
+          <div className="app-header-actions">
+            <button className="btn btn-ghost btn-small" onClick={() => setTourOpen(true)}>Tour</button>
+            <button className="btn btn-ghost btn-small" onClick={() => setDocsOpen(true)}>Docs</button>
+          </div>
+        </div>
         <p className="lede">
           Write a preemption policy, configure the workload, and run it against a simulated
           2PL or OCC transaction stream — no kernel patch, no real DBMS required. This is a
@@ -197,6 +228,9 @@ export default function App() {
           a real kernel or database.
         </p>
       </header>
+
+      {tourOpen && <FirstRunTour onTryExample={handleTryCriticalAwareExample} onClose={closeTour} />}
+      {docsOpen && <Documentation onClose={() => setDocsOpen(false)} />}
 
       <div className="protocol-bar">
         <label className="mono protocol-label">Protocol</label>

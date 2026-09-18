@@ -4,6 +4,7 @@ import type { ConfigOverrides } from './ConfigPanel'
 import { sweep } from '../api'
 import { SimulateError } from '../types'
 import ContentionLineChart from './charts/ContentionLineChart'
+import { downloadCSV, sweepToCSVRows } from '../export'
 
 interface Props {
   protocol: Protocol
@@ -97,7 +98,16 @@ export default function SweepPanel({ protocol, policies, algorithm, overrides }:
         </div>
       )}
       {result && (
-        <div className="chart-grid">
+        <>
+          <div className="run-again-bar">
+            <button
+              className="btn btn-ghost btn-small"
+              onClick={() => downloadCSV(`simdb-preempt-sweep-${Date.now()}.csv`, sweepToCSVRows(result))}
+            >
+              Download CSV
+            </button>
+          </div>
+          <div className="chart-grid">
           {METRIC_CHARTS.map((m) => (
             <ContentionLineChart
               key={m.key}
@@ -110,7 +120,8 @@ export default function SweepPanel({ protocol, policies, algorithm, overrides }:
               }))}
             />
           ))}
-        </div>
+          </div>
+        </>
       )}
     </div>
   )

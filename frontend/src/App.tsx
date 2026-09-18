@@ -7,8 +7,11 @@ import BaselineSelector from './components/BaselineSelector'
 import SweepPanel from './components/SweepPanel'
 import TimelineSection from './components/timeline/TimelineSection'
 import ExperimentBuilder from './components/experiment/ExperimentBuilder'
+import ExportPanel from './components/export/ExportPanel'
+import ReproducePanel from './components/export/ReproducePanel'
 import { compare, fetchConfigDefaults, fetchPolicies, fetchTemplates } from './api'
 import { SimulateError, type ApiError, type CompareResponse, type Config, type PolicyInfo, type Protocol, type Template } from './types'
+import { checkReproduction, type ReproductionCheck, type RunRecordV1 } from './export'
 import './App.css'
 
 const STORAGE_KEY = 'simdb-preempt:editor-source'
@@ -89,17 +92,23 @@ export default function App() {
     })
   }
 
-  async function runWithOverrides(runOverrides: ConfigOverrides) {
+  async function executeRun(
+    protocols: Protocol[],
+    baselines: string[],
+    algorithm: string | undefined,
+    runOverrides: ConfigOverrides,
+    forHistoryProtocolChoice: ProtocolChoice,
+  ): Promise<RunBatch | null> {
     setRunning(true)
     setError(null)
     setViewingHistoryId(null)
     try {
       const results: RunBatch = []
-      for (const protocol of activeProtocols) {
+      for (const protocol of protocols) {
         const response = await compare({
           protocol,
-          policies: Array.from(selectedBaselines),
-          algorithm: includeMyAlgorithm ? source : undefined,
+          policies: baselines,
+          algorithm,
           config: runOverrides,
         })
         results.push({ protocol, response })
@@ -111,20 +120,32 @@ export default function App() {
           id: `${Date.now()}`,
           timestamp: new Date().toLocaleTimeString(),
           seed: usedSeed,
-          protocolChoice,
+          protocolChoice: forHistoryProtocolChoice,
           runs: results,
         },
         ...prev,
       ].slice(0, MAX_HISTORY))
+      return results
     } catch (e) {
       if (e instanceof SimulateError) {
         setError(e.detail)
       } else {
         setError({ type: 'bad_request', title: 'Request Failed', message: String(e) })
       }
+      return null
     } finally {
       setRunning(false)
     }
+  }
+
+  function runWithOverrides(runOverrides: ConfigOverrides) {
+    return executeRun(
+      activeProtocols,
+      Array.from(selectedBaselines),
+      includeMyAlgorithm ? source : undefined,
+      runOverrides,
+      protocolChoice,
+    )
   }
 
   function handleRun() {
@@ -136,6 +157,22 @@ export default function App() {
     const next = { ...overrides, seed: newSeed }
     setOverrides(next)
     return runWithOverrides(next)
+  }
+
+  async function handleLoadRunRecord(record: RunRecordV1): Promise<ReproductionCheck> {
+    setProtocolChoice(record.protocolChoice)
+    setSelectedBaselines(new Set(record.selectedBaselines))
+    setIncludeMyAlgorithm(record.includeMyAlgorithm)
+    if (record.algorithmSource != null) setSource(record.algorithmSource)
+    setOverrides(record.overrides)
+
+    const protocols: Protocol[] = record.protocolChoice === 'both' ? ['2pl', 'occ'] : [record.protocolChoice]
+    const algorithm = record.includeMyAlgorithm ? record.algorithmSource ?? undefined : undefined
+    const reproduced = await executeRun(protocols, record.selectedBaselines, algorithm, record.overrides, record.protocolChoice)
+    if (reproduced === null) {
+      throw new Error('Reproduction run failed — see the error above for details.')
+    }
+    return checkReproduction(record, reproduced)
   }
 
   function viewHistoryEntry(entry: HistoryEntry) {
@@ -235,6 +272,17 @@ export default function App() {
           </div>
 
           <ResultsPanel running={running} error={error} runs={runs} />
+
+          <ExportPanel
+            protocolChoice={protocolChoice}
+            selectedBaselines={Array.from(selectedBaselines)}
+            includeMyAlgorithm={includeMyAlgorithm}
+            source={source}
+            overrides={overrides}
+            runs={runs}
+          />
+
+          <ReproducePanel onLoad={handleLoadRunRecord} running={running} />
 
           <SweepPanel
             protocol={activeProtocols[0]}

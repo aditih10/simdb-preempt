@@ -12,6 +12,12 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 client = TestClient(app)
 
 
+def _restrict_to_expected_keys(actual, expected):
+    """paper-experiments added new, additive metrics fields — compare only
+    the keys results.json (frozen before those existed) actually has."""
+    return {k: actual[k] for k in expected}
+
+
 def test_health():
     r = client.get("/api/health")
     assert r.status_code == 200
@@ -57,7 +63,7 @@ def test_simulate_matches_committed_results_for_default_config():
         expected = json.load(f)["tpl"]["matrix"]["none"]
     r = client.post("/api/simulate", json={"protocol": "2pl", "policy": "none"})
     assert r.status_code == 200
-    assert r.json()["metrics"] == expected
+    assert _restrict_to_expected_keys(r.json()["metrics"], expected) == expected
 
 
 def test_simulate_invalid_policy_name_rejected():
@@ -109,7 +115,9 @@ def test_compare_matrix_matches_committed_results():
         "policies": ["none", "random", "critical_aware", "grace_period"],
     })
     assert r.status_code == 200
-    assert r.json()["matrix"] == expected
+    actual_matrix = r.json()["matrix"]
+    restricted = {p: _restrict_to_expected_keys(row, expected[p]) for p, row in actual_matrix.items()}
+    assert restricted == expected
 
 
 def test_compare_with_custom_algorithm_alongside_baselines():

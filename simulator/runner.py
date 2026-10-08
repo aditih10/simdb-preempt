@@ -8,7 +8,7 @@ import json
 import random
 
 from .engine import Environment
-from .model import Config, Core, DB, Stats, Tracer
+from .model import Config, Core, DB, RngPool, Stats, Tracer
 from .policies import PreemptionPolicy, BUILTIN_POLICIES
 from .transactions import arrival_process
 
@@ -16,12 +16,14 @@ from .transactions import arrival_process
 def run_simulation(protocol: str, policy: PreemptionPolicy, cfg: Config, tracer=None):
     random.seed(cfg.seed)
     env = Environment()
+    env.rng = RngPool(cfg)
     db = DB(env, cfg)
     stats = Stats()
     cores = [Core(env, cfg, policy, i, tracer=tracer) for i in range(cfg.num_cores)]
     env.process(arrival_process(env, db, cores, cfg, stats, protocol, tracer))
     env.run(until=cfg.sim_time)
     mean_lat, p99_lat = stats.latency_stats()
+    mean_res_lat, p99_res_lat = stats.resolved_latency_stats()
     stats.preempt_events = sum(c.preempt_count for c in cores)
     stats.deferred_events = sum(c.deferred_count for c in cores)
     return {
@@ -37,6 +39,14 @@ def run_simulation(protocol: str, policy: PreemptionPolicy, cfg: Config, tracer=
         "cpu_ms_wasted_on_aborts": round(stats.cpu_ms_wasted_on_aborts, 1),
         "preempt_events": stats.preempt_events,
         "deferred_events": stats.deferred_events,
+        # ---- new, additive fields (paper-experiments) ----
+        "abort_rate_resolved_pct": round(100 * stats.abort_rate_resolved(), 2),
+        "mean_latency_resolved_ms": round(mean_res_lat, 3),
+        "p99_latency_resolved_ms": round(p99_res_lat, 3),
+        "preempt_attempts_while_descheduled": stats.preempt_attempts_while_descheduled,
+        "aborts_validation_preempted": stats.aborts_validation_preempted,
+        "aborts_version_conflict": stats.aborts_version_conflict,
+        "aborts_lock_timeout": stats.aborts_lock_timeout,
     }
 
 

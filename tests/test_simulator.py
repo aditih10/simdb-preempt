@@ -14,16 +14,30 @@ def _load_results():
         return json.load(f)
 
 
+def _restrict_to_expected_keys(actual_matrix, expected_matrix):
+    """paper-experiments added several new, additive metrics fields (see
+    Config.rng_mode/double_preempt/grace_clock/warmup_ms and the Stats
+    fields they feed) — run_simulation's result dict now has keys that
+    results.json, frozen before those existed, does not. Every
+    pre-existing key's value must still match exactly; only compare the
+    keys results.json actually has."""
+    return {
+        policy: {k: row[k] for k in expected_row}
+        for policy, row in actual_matrix.items()
+        for expected_row in [expected_matrix[policy]]
+    }
+
+
 def test_tpl_matrix_matches_committed_results():
     expected = _load_results()["tpl"]["matrix"]
     actual = run_matrix("2pl", TPL_CFG)
-    assert actual == expected
+    assert _restrict_to_expected_keys(actual, expected) == expected
 
 
 def test_occ_matrix_matches_committed_results():
     expected = _load_results()["occ"]["matrix"]
     actual = run_matrix("occ", OCC_CFG)
-    assert actual == expected
+    assert _restrict_to_expected_keys(actual, expected) == expected
 
 
 def test_same_seed_is_deterministic():

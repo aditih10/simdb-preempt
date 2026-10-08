@@ -37,6 +37,61 @@ class Config:
     arrival_rate: float = 2.0
     seed: int = 42
 
+    # ---- paper-experiments flags: every one of these defaults to the
+    # exact behavior that existed before this flag was added. See
+    # RngPool / Core.enter_critical / transactions.py for what each mode
+    # actually changes. ----
+    rng_mode: str = "legacy"            # "legacy" | "split"
+    double_preempt: str = "legacy"      # "legacy" | "ignore"
+    grace_clock: str = "per_lock"       # "per_lock" | "per_section"
+    warmup_ms: float = 0.0
+
+
+class RngPool:
+    """Backs Config.rng_mode.
+
+    "legacy" (default): every stream is the shared global `random` module,
+    exactly as the original single-stream code used it — calling
+    `pool.arrival.expovariate(...)` is calling `random.expovariate(...)`,
+    same object, same global Mersenne Twister state, same call order as
+    before this existed. This is what makes rng_mode="legacy" byte-identical
+    to the pre-flag code: nothing about *which* draws happen or in what
+    order changes, only the spelling of the call target.
+
+    "split": four independent random.Random streams — arrival, keyset,
+    op-time, and one per core for preemption timing (which also supplies
+    the preemption-penalty draw, since that's a direct effect of a
+    preemption firing, not of the workload) — each seeded deterministically
+    from cfg.seed with a distinct offset. Workload draws (arrival/keyset/
+    optime) never read from a preemption stream and vice versa, so how many
+    preemption-timing draws a policy happens to make can never perturb the
+    workload's own sample path.
+    """
+
+    _SALT = 7919  # arbitrary large prime, just for offset separation
+
+    def __init__(self, cfg: Config):
+        self.mode = cfg.rng_mode
+        if self.mode == "split":
+            base = cfg.seed
+            self.arrival = random.Random(base * self._SALT + 1)
+            self.keyset = random.Random(base * self._SALT + 2)
+            self.optime = random.Random(base * self._SALT + 3)
+            self._base = base
+            self._preempt = {}
+        else:
+            self.arrival = random
+            self.keyset = random
+            self.optime = random
+            self._preempt = None
+
+    def preempt(self, core_id: int):
+        if self.mode != "split":
+            return random
+        if core_id not in self._preempt:
+            self._preempt[core_id] = random.Random(self._base * self._SALT + 1000 + core_id)
+        return self._preempt[core_id]
+
 
 class DB:
     def __init__(self, env: Environment, cfg: Config):
@@ -48,7 +103,7 @@ class DB:
 
     def sample_keyset(self, k):
         pool = min(self.pool_size, self.cfg.db_size)
-        keys = random.sample(range(pool), min(k, pool))
+        keys = self.env.rng.keyset.sample(range(pool), min(k, pool))
         return sorted(keys)
 
 
@@ -74,7 +129,7 @@ class Core:
 
     def _os_scheduler(self):
         while True:
-            yield self.env.timeout(random.expovariate(self.cfg.preempt_rate))
+            yield self.env.timeout(self.env.rng.preempt(self.id).expovariate(self.cfg.preempt_rate))
             if self.current_proc is None:
                 continue
             # Capture which process/transaction this decision is ABOUT
@@ -98,8 +153,16 @@ class Core:
                     self.tracer.mark(self.id, txn_id, "os_preempt", self.env.now)
 
     def enter_critical(self):
+        # grace_clock="per_lock" (default): always stamp — reproduces the
+        # original unconditional-reset behavior exactly, since this branch
+        # is taken regardless of self.critical's value.
+        # grace_clock="per_section": a re-entrant call while already
+        # critical (e.g. 2PL acquiring its 2nd..Nth lock) must not push the
+        # clock forward, so GracePeriodPolicy's bound is measured from
+        # first entry into the critical region, not the most recent lock.
+        if not (self.cfg.grace_clock == "per_section" and self.critical):
+            self.critical_since = self.env.now
         self.critical = True
-        self.critical_since = self.env.now
 
     def exit_critical(self):
         self.critical = False
@@ -109,15 +172,39 @@ class Core:
 @dataclass
 class Stats:
     committed_latencies: list = field(default_factory=list)
+    # G: arrival-to-resolution time for every COMMITTED *and* ABORTED
+    # transaction (committed_latencies above is committed-only and is left
+    # untouched). A separate list, not a derived re-filter, because aborted
+    # transactions never appear in committed_latencies at all.
+    resolved_latencies: list = field(default_factory=list)
     aborted: int = 0
     committed: int = 0
     attempted: int = 0
     cpu_ms_wasted_on_aborts: float = 0.0
     preempt_events: int = 0
     deferred_events: int = 0
+    # B: how many preemption attempts landed on a transaction already
+    # waiting out a preempt_penalty (double_preempt="ignore" only — stays
+    # 0 under the default "legacy" mode, since legacy lets those attempts
+    # escape run_operation as Preempted instead of counting+discarding them).
+    preempt_attempts_while_descheduled: int = 0
+    # D: abort-cause breakdown. Always kept in exact sync with `aborted`
+    # (see transactions.py) — aborts_validation_preempted + aborts_
+    # version_conflict + aborts_lock_timeout must equal aborted in every run.
+    aborts_validation_preempted: int = 0
+    aborts_version_conflict: int = 0
+    aborts_lock_timeout: int = 0
 
     def abort_rate(self):
         return self.aborted / self.attempted if self.attempted else 0.0
+
+    def abort_rate_resolved(self):
+        """F: denominator is resolved transactions (committed+aborted) only,
+        excluding whatever's still outstanding/in-flight — unlike
+        abort_rate(), whose denominator (attempted) includes transactions
+        truncated at the sim_time boundary that never resolved either way."""
+        resolved = self.committed + self.aborted
+        return self.aborted / resolved if resolved else 0.0
 
     def throughput(self, sim_time_ms):
         return self.committed / (sim_time_ms / 1000.0)
@@ -127,6 +214,13 @@ class Stats:
             return 0.0, 0.0
         return (sum(self.committed_latencies) / len(self.committed_latencies),
                 percentile(self.committed_latencies, 99))
+
+    def resolved_latency_stats(self):
+        """G: mean/P99 over committed+aborted arrival-to-resolution time."""
+        if not self.resolved_latencies:
+            return 0.0, 0.0
+        return (sum(self.resolved_latencies) / len(self.resolved_latencies),
+                percentile(self.resolved_latencies, 99))
 
 
 class Tracer:

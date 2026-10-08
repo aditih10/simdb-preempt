@@ -1,20 +1,65 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --bg: #0A1120;
-  --surface: #111B2E;
-  --surface-2: #0D1526;
-  --line: rgba(228, 233, 242, 0.10);
-  --line-strong: rgba(228, 233, 242, 0.20);
-  --text: #E4E9F2;
-  --muted: #7C8AA5;
-  --dim: #4B5872;
-  --cpu: #4FD1C5;
-  --wait: #F0B429;
-  --penalty: #F0576B;
-  --commit: #4FD17A;
-  --abort: #F0576B;
-  --violet: #8C7BFF;
+  /* ---- surfaces: near-black with a wine undertone, not neutral
+     brown-black — the whole base layer carries a trace of burgundy ---- */
+  --bg: #0C0708;
+  --surface: #170D10;
+  --surface-2: #1E1113;
+  --surface-3: #110809;
+  --line: rgba(245, 232, 208, 0.09);
+  --line-strong: rgba(245, 232, 208, 0.18);
+
+  /* ---- burgundy / wine family — a real structural color, not a tint ---- */
+  --wine: #5A1020;
+  --oxblood: #741B2B;
+  --wine-glow: rgba(90, 16, 32, 0.55);
+  --oxblood-glow: rgba(116, 27, 43, 0.45);
+
+  /* ---- text ---- */
+  --text: #F5E8D0;
+  --muted: #A89A8A;
+  --dim: #6B5F52;
+
+  /* ---- accent family: burnt orange (CTA) / vivid orange (active
+     highlight) / crimson (result emphasis) / coral (occasional
+     highlight) / gold (premium secondary info) ---- */
+  --cpu: #E2611F;
+  --accent: #E2611F;
+  --accent-bright: #FF6A00;
+  --accent-deep: #8C3A1E;
+  --accent-ink: #1A0D05;
+  --crimson: #D7263D;
+  --coral: #FF5C5C;
+  --gold: #DFAF55;
+
+  /* ---- data-semantic colors (kept perceptually distinct from the
+     accent on purpose - these label real simulation data, not brand
+     chrome, so hue separation matters more than palette purity;
+     penalty/wait now pull from the same crimson/gold family so data
+     and chrome read as one palette instead of two) ---- */
+  --wait: var(--gold);
+  --penalty: var(--crimson);
+  --commit: #5BAE74;
+  --abort: var(--crimson);
+  --violet: #9A6B8C;
+
+  /* ---- typography ---- */
+  --font-display: 'Big Shoulders Display', 'IBM Plex Sans', sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* ---- geometry: mostly rectangular, radius reserved for small
+     interactive controls only ---- */
+  --radius-sm: 2px;
+  --radius: 3px;
+  --radius-pill: 999px;
+
+  --ease: cubic-bezier(0.16, 0.8, 0.24, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
 }
 
 * { box-sizing: border-box; }
@@ -27,11 +72,11 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
 }
 
-.mono { font-family: 'IBM Plex Mono', monospace; }
+.mono { font-family: var(--font-mono); }
 
 button {
   font-family: inherit;
@@ -39,9 +84,11 @@ button {
 }
 
 select, input {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: var(--font-mono);
 }
 
+a { color: var(--accent); }
+
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: var(--surface-2); }
+::-webkit-scrollbar-track { background: var(--surface-3); }
 ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 5px; }

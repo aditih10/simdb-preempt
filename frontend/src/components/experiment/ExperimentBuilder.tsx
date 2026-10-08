@@ -104,73 +104,80 @@ export default function ExperimentBuilder({ policies, algorithm, overrides }: Pr
 
   return (
     <div className="experiment-builder">
-      <div className="config-panel-header">
-        <h3 className="mono">Experiment Builder</h3>
-      </div>
-      <p className="section-note">
-        Sweeps one parameter across a range, replicated with independent seeds, and aggregates
-        mean/standard-deviation/confidence-interval statistics per policy — not just a single run.
-      </p>
-
-      <div className="sweep-controls">
-        <label className="config-field">
-          <span className="config-field-label">Parameter</span>
-          <select className="protocol-select" value={param} onChange={(e) => handleParamChange(e.target.value as SweepParam)}>
-            {Object.entries(PARAM_META).map(([key, meta]) => (
-              <option key={key} value={key}>{meta.label}</option>
-            ))}
-          </select>
-        </label>
-        <label className="config-field">
-          <span className="config-field-label">Start</span>
-          <input className="mono config-field-input" type="number" step="any" value={start} onChange={(e) => setStart(Number(e.target.value))} />
-        </label>
-        <label className="config-field">
-          <span className="config-field-label">Stop</span>
-          <input className="mono config-field-input" type="number" step="any" value={stop} onChange={(e) => setStop(Number(e.target.value))} />
-        </label>
-        <label className="config-field">
-          <span className="config-field-label">Step</span>
-          <input className="mono config-field-input" type="number" step="any" value={step} onChange={(e) => setStep(Number(e.target.value))} />
-        </label>
-        <label className="config-field">
-          <span className="config-field-label">Replications</span>
-          <input className="mono config-field-input" type="number" min={1} max={20} value={replications}
-            onChange={(e) => setReplications(Math.max(1, Math.min(20, Number(e.target.value))))} />
-        </label>
+      <div className="instrument-intro">
+        <h3 className="timeline-title">Experiment Builder</h3>
+        <p className="section-note">
+          Sweeps one parameter across a range, replicated with independent seeds, and aggregates
+          mean/standard-deviation/confidence-interval statistics per policy — not just a single run.
+        </p>
       </div>
 
-      <div className="baseline-selector experiment-protocols">
-        <span className="config-field-label mono">Protocols</span>
-        <label className="baseline-checkbox">
-          <input type="checkbox" checked={protocols.has('2pl')} onChange={() => toggleProtocol('2pl')} /> 2PL
-        </label>
-        <label className="baseline-checkbox">
-          <input type="checkbox" checked={protocols.has('occ')} onChange={() => toggleProtocol('occ')} /> OCC
-        </label>
+      <div className="instrument-group">
+        <span className="instrument-group-label mono">Sweep</span>
+        <div className="sweep-controls">
+          <label className="config-field">
+            <span className="config-field-label">Parameter</span>
+            <select className="protocol-select" value={param} onChange={(e) => handleParamChange(e.target.value as SweepParam)}>
+              {Object.entries(PARAM_META).map(([key, meta]) => (
+                <option key={key} value={key}>{meta.label}</option>
+              ))}
+            </select>
+          </label>
+          <label className="config-field">
+            <span className="config-field-label">Start</span>
+            <input className="mono config-field-input" type="number" step="any" value={start} onChange={(e) => setStart(Number(e.target.value))} />
+          </label>
+          <label className="config-field">
+            <span className="config-field-label">Stop</span>
+            <input className="mono config-field-input" type="number" step="any" value={stop} onChange={(e) => setStop(Number(e.target.value))} />
+          </label>
+          <label className="config-field">
+            <span className="config-field-label">Step</span>
+            <input className="mono config-field-input" type="number" step="any" value={step} onChange={(e) => setStep(Number(e.target.value))} />
+          </label>
+          <label className="config-field">
+            <span className="config-field-label">Replications</span>
+            <input className="mono config-field-input" type="number" min={1} max={20} value={replications}
+              onChange={(e) => setReplications(Math.max(1, Math.min(20, Number(e.target.value))))} />
+          </label>
+        </div>
       </div>
 
-      <p className="protocol-note">
-        {values.length} value{values.length === 1 ? '' : 's'} × {protocols.size} protocol{protocols.size === 1 ? '' : 's'} × {replications} replication{replications === 1 ? '' : 's'} = <strong>{totalRuns} runs</strong>
-        {tooManyRuns && <span className="warning-text"> — reduce this below {MAX_RUNS} to run.</span>}
-      </p>
+      <div className="instrument-group">
+        <span className="instrument-group-label mono">Protocols</span>
+        <div className="baseline-selector experiment-protocols">
+          <label className="baseline-checkbox">
+            <input type="checkbox" checked={protocols.has('2pl')} onChange={() => toggleProtocol('2pl')} /> 2PL
+          </label>
+          <label className="baseline-checkbox">
+            <input type="checkbox" checked={protocols.has('occ')} onChange={() => toggleProtocol('occ')} /> OCC
+          </label>
+        </div>
+      </div>
 
-      <div className="run-again-bar">
-        <button className="btn btn-primary" onClick={handleRun} disabled={running || nothingSelected || tooManyRuns || noProtocols}>
-          {running ? 'Running…' : 'Run Experiment'}
-        </button>
-        {running && <button className="btn btn-ghost btn-small" onClick={handleCancel}>Cancel</button>}
-        {progress.total > 0 && (
-          <span className="mono progress-readout">
-            Run {progress.done} / {progress.total}
-          </span>
+      <div className="instrument-group instrument-group-execute">
+        <span className="instrument-group-label mono">Execute</span>
+        <p className="protocol-note">
+          {values.length} value{values.length === 1 ? '' : 's'} × {protocols.size} protocol{protocols.size === 1 ? '' : 's'} × {replications} replication{replications === 1 ? '' : 's'} = <strong>{totalRuns} runs</strong>
+          {tooManyRuns && <span className="warning-text"> — reduce this below {MAX_RUNS} to run.</span>}
+        </p>
+        <div className="run-again-bar">
+          <button className="btn btn-primary" onClick={handleRun} disabled={running || nothingSelected || tooManyRuns || noProtocols}>
+            {running ? 'Running…' : 'Run Experiment'}
+          </button>
+          {running && <button className="btn btn-ghost btn-small" onClick={handleCancel}>Cancel</button>}
+          {progress.total > 0 && (
+            <span className="mono progress-readout">
+              Run {progress.done} / {progress.total}
+            </span>
+          )}
+        </div>
+        {progress.total > 0 && (running || progress.done > 0) && (
+          <div className="progress-bar-track">
+            <div className="progress-bar-fill" style={{ width: `${(progress.done / progress.total) * 100}%` }} />
+          </div>
         )}
       </div>
-      {progress.total > 0 && (running || progress.done > 0) && (
-        <div className="progress-bar-track">
-          <div className="progress-bar-fill" style={{ width: `${(progress.done / progress.total) * 100}%` }} />
-        </div>
-      )}
 
       {nothingSelected && <p className="results-placeholder">Select at least one baseline or "My Algorithm" above to run an experiment.</p>}
       {noProtocols && <p className="results-placeholder">Select at least one protocol.</p>}

@@ -1,4 +1,5 @@
 import type { PolicyInfo } from '../types'
+import { colorFor } from '../palette'
 
 interface Props {
   policies: PolicyInfo[]
@@ -21,11 +22,13 @@ export default function BaselineSelector({
             checked={selected.has(p.key)}
             onChange={() => onToggle(p.key)}
           />
+          <span className="baseline-dot" style={{ background: colorFor(p.key) }} />
           {p.name}
         </label>
       ))}
       <label className="baseline-checkbox baseline-checkbox-mine" title="Run the code currently in the editor">
         <input type="checkbox" checked={includeMyAlgorithm} onChange={onToggleMyAlgorithm} />
+        <span className="baseline-dot" style={{ background: colorFor('custom') }} />
         My Algorithm
       </label>
     </div>

@@ -32,17 +32,19 @@ export default function ApiReferencePanel() {
       <pre className="reference-example mono">{EXAMPLE}</pre>
 
       <h4 className="mono">Available on core / env</h4>
-      <table className="reference-table">
-        <tbody>
-          {FIELDS.map((f) => (
-            <tr key={f.name}>
-              <td className="mono field-name">{f.name}</td>
-              <td className="mono field-type">{f.type}</td>
-              <td className="field-desc">{f.desc}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="reference-table-wrap">
+        <table className="reference-table">
+          <tbody>
+            {FIELDS.map((f) => (
+              <tr key={f.name}>
+                <td className="mono field-name">{f.name}</td>
+                <td className="mono field-type">{f.type}</td>
+                <td className="field-desc">{f.desc}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <h4 className="mono">Execution model</h4>
       <ul className="reference-list">

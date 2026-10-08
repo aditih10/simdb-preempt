@@ -90,13 +90,13 @@ export default function TimelineSection({ protocol, policies, algorithm, overrid
 
   return (
     <div className="timeline-section">
-      <div className="config-panel-header">
-        <h3 className="mono">Visual Simulation: CPU Timeline &amp; Event Trace</h3>
+      <div className="timeline-intro">
+        <h3 className="timeline-title">CPU Timeline &amp; Event Trace</h3>
+        <p className="section-note">
+          Runs each selected policy once and captures a windowed, per-core event trace — every
+          block below is real simulated execution, not an illustration.
+        </p>
       </div>
-      <p className="section-note">
-        Runs each selected policy once and captures a windowed, per-core event trace — every
-        block below is real simulated execution, not an illustration.
-      </p>
       <div className="sweep-controls">
         <label className="config-field">
           <span className="config-field-label">Window Start (ms)</span>

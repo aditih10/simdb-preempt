@@ -11,6 +11,7 @@ import ExportPanel from './components/export/ExportPanel'
 import ReproducePanel from './components/export/ReproducePanel'
 import FirstRunTour from './components/onboarding/FirstRunTour'
 import Documentation from './components/docs/Documentation'
+import SectionHeading from './components/layout/SectionHeading'
 import { compare, fetchConfigDefaults, fetchPolicies, fetchTemplates } from './api'
 import { SimulateError, type ApiError, type CompareResponse, type Config, type PolicyInfo, type Protocol, type Template } from './types'
 import { checkReproduction, type ReproductionCheck, type RunRecordV1 } from './export'
@@ -210,113 +211,133 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <header className="app-header">
-        <div className="kicker mono">
-          simdb-preempt <span>/</span> simulation lab
+      <header className="hero">
+        <div className="hero-backdrop" aria-hidden="true" />
+        <div className="hero-main">
+          <div className="kicker mono">
+            simdb-preempt <span>/</span> simulation lab
+          </div>
+          <h1 className="hero-title">
+            Build<br />Your<br /><span className="hero-title-accent">Scheduler</span>
+          </h1>
+          <p className="lede">
+            Write a preemption policy, configure the workload, and run it against a simulated
+            2PL or OCC transaction stream — no kernel patch, no real DBMS required. This is a
+            simulation environment for early-stage evaluation, not a replacement for testing on
+            a real kernel or database.
+          </p>
         </div>
-        <div className="app-header-row">
-          <h1>Build your scheduler</h1>
-          <div className="app-header-actions">
+
+        <div className="hero-rail">
+          <div className="hero-rail-row">
+            <label className="mono protocol-label">Protocol</label>
+            <select
+              className="protocol-select"
+              value={protocolChoice}
+              onChange={(e) => setProtocolChoice(e.target.value as ProtocolChoice)}
+            >
+              <option value="2pl">2PL — Two-Phase Locking</option>
+              <option value="occ">OCC — Optimistic Concurrency Control</option>
+              <option value="both">Both — run 2PL and OCC</option>
+            </select>
+          </div>
+          <BaselineSelector
+            policies={policies}
+            selected={selectedBaselines}
+            onToggle={toggleBaseline}
+            includeMyAlgorithm={includeMyAlgorithm}
+            onToggleMyAlgorithm={() => setIncludeMyAlgorithm((v) => !v)}
+          />
+          {protocolChoice === 'both' && (
+            <p className="protocol-note">
+              "Both" applies the same overrides to each protocol's own defaults and runs two
+              separate simulations.
+            </p>
+          )}
+          <div className="hero-rail-actions">
             <button className="btn btn-ghost btn-small" onClick={() => setTourOpen(true)}>Tour</button>
             <button className="btn btn-ghost btn-small" onClick={() => setDocsOpen(true)}>Docs</button>
           </div>
         </div>
-        <p className="lede">
-          Write a preemption policy, configure the workload, and run it against a simulated
-          2PL or OCC transaction stream — no kernel patch, no real DBMS required. This is a
-          simulation environment for early-stage evaluation, not a replacement for testing on
-          a real kernel or database.
-        </p>
       </header>
 
       {tourOpen && <FirstRunTour onTryExample={handleTryCriticalAwareExample} onClose={closeTour} />}
       {docsOpen && <Documentation onClose={() => setDocsOpen(false)} />}
 
-      <div className="protocol-bar">
-        <label className="mono protocol-label">Protocol</label>
-        <select
-          className="protocol-select"
-          value={protocolChoice}
-          onChange={(e) => setProtocolChoice(e.target.value as ProtocolChoice)}
-        >
-          <option value="2pl">2PL — Two-Phase Locking</option>
-          <option value="occ">OCC — Optimistic Concurrency Control</option>
-          <option value="both">Both — run 2PL and OCC</option>
-        </select>
-        <BaselineSelector
-          policies={policies}
-          selected={selectedBaselines}
-          onToggle={toggleBaseline}
-          includeMyAlgorithm={includeMyAlgorithm}
-          onToggleMyAlgorithm={() => setIncludeMyAlgorithm((v) => !v)}
-        />
-      </div>
+      <main>
+        <section className="stage" id="configure">
+          <SectionHeading index="01" label="Configure" />
+          <div className="configure-grid">
+            <div className="configure-rail">
+              <ConfigPanel
+                values={primaryDefaults}
+                overrides={overrides}
+                onChange={setOverrides}
+                onResetToDefaults={() => setOverrides({})}
+              />
+            </div>
 
-      <ConfigPanel
-        values={primaryDefaults}
-        overrides={overrides}
-        onChange={setOverrides}
-        onResetToDefaults={() => setOverrides({})}
-      />
-      {protocolChoice === 'both' && (
-        <p className="protocol-note both-note">
-          "Both" applies the same overrides on top of each protocol's own defaults (2PL and OCC
-          have different default contention/ops-per-txn) and runs two separate simulations.
-        </p>
-      )}
+            <div className="configure-main">
+              <AlgorithmEditor
+                source={source}
+                onChange={setSource}
+                onRun={handleRun}
+                onReset={handleReset}
+                running={running || nothingSelected}
+                templates={templates}
+                selectedTemplateKey={templateKey}
+                onSelectTemplate={handleSelectTemplate}
+                errorLine={error?.line}
+              />
+              {nothingSelected && (
+                <p className="editor-error-hint mono" style={{ border: 'none', background: 'transparent' }}>
+                  Select at least one baseline or enable "My Algorithm" to run.
+                </p>
+              )}
 
-      <main className="workspace">
-        <section className="workspace-main">
-          <AlgorithmEditor
-            source={source}
-            onChange={setSource}
-            onRun={handleRun}
-            onReset={handleReset}
-            running={running || nothingSelected}
-            templates={templates}
-            selectedTemplateKey={templateKey}
-            onSelectTemplate={handleSelectTemplate}
-            errorLine={error?.line}
-          />
-          {nothingSelected && (
-            <p className="editor-error-hint mono" style={{ border: 'none', background: 'transparent' }}>
-              Select at least one baseline or enable "My Algorithm" to run.
-            </p>
-          )}
-
-          <div className="run-again-bar">
-            <button className="btn btn-ghost btn-small" onClick={handleRunAgainNewSeed} disabled={running || nothingSelected}>
-              Run Again (new seed)
-            </button>
-            {history.length > 0 && (
-              <div className="run-history">
-                <span className="config-field-label mono">History</span>
-                {history.map((h) => (
-                  <button
-                    key={h.id}
-                    className={`history-chip mono${viewingHistoryId === h.id ? ' history-chip-active' : ''}`}
-                    onClick={() => viewHistoryEntry(h)}
-                    title={`${h.protocolChoice} · seed ${h.seed}`}
-                  >
-                    {h.timestamp} · seed {h.seed}
-                  </button>
-                ))}
+              <div className="run-again-bar">
+                <button className="btn btn-ghost btn-small" onClick={handleRunAgainNewSeed} disabled={running || nothingSelected}>
+                  Run Again (new seed)
+                </button>
+                {history.length > 0 && (
+                  <div className="run-history">
+                    <span className="config-field-label mono">History</span>
+                    {history.map((h) => (
+                      <button
+                        key={h.id}
+                        className={`history-chip mono${viewingHistoryId === h.id ? ' history-chip-active' : ''}`}
+                        onClick={() => viewHistoryEntry(h)}
+                        title={`${h.protocolChoice} · seed ${h.seed}`}
+                      >
+                        {h.timestamp} · seed {h.seed}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </div>
 
+            <div className="configure-reference">
+              <ApiReferencePanel />
+            </div>
+          </div>
+        </section>
+
+        <section className="stage" id="results">
+          <SectionHeading index="02" label="Results" />
           <ResultsPanel running={running} error={error} runs={runs} />
 
-          <ExportPanel
-            protocolChoice={protocolChoice}
-            selectedBaselines={Array.from(selectedBaselines)}
-            includeMyAlgorithm={includeMyAlgorithm}
-            source={source}
-            overrides={overrides}
-            runs={runs}
-          />
-
-          <ReproducePanel onLoad={handleLoadRunRecord} running={running} />
+          <div className="stage-sub-grid">
+            <ExportPanel
+              protocolChoice={protocolChoice}
+              selectedBaselines={Array.from(selectedBaselines)}
+              includeMyAlgorithm={includeMyAlgorithm}
+              source={source}
+              overrides={overrides}
+              runs={runs}
+            />
+            <ReproducePanel onLoad={handleLoadRunRecord} running={running} />
+          </div>
 
           <SweepPanel
             protocol={activeProtocols[0]}
@@ -324,23 +345,26 @@ export default function App() {
             algorithm={includeMyAlgorithm ? source : undefined}
             overrides={overrides}
           />
+        </section>
 
+        <section className="stage stage-execution" id="execution">
+          <SectionHeading index="03" label="Execution" />
           <TimelineSection
             protocol={activeProtocols[0]}
             policies={Array.from(selectedBaselines)}
             algorithm={includeMyAlgorithm ? source : undefined}
             overrides={overrides}
           />
+        </section>
 
+        <section className="stage" id="experiment">
+          <SectionHeading index="04" label="Experiment" />
           <ExperimentBuilder
             policies={Array.from(selectedBaselines)}
             algorithm={includeMyAlgorithm ? source : undefined}
             overrides={overrides}
           />
         </section>
-        <aside className="workspace-aside">
-          <ApiReferencePanel />
-        </aside>
       </main>
     </div>
   )

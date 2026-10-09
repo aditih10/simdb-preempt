@@ -28,7 +28,8 @@ def test_list_policies_includes_all_builtins():
     r = client.get("/api/policies")
     assert r.status_code == 200
     keys = {p["key"] for p in r.json()["builtin"]}
-    assert keys == {"none", "random", "critical_aware", "grace_period"}
+    assert keys == {"none", "random", "critical_aware", "grace_period",
+                     "commit_proximity_k1", "commit_proximity_k2"}
 
 
 def test_config_defaults_2pl_and_occ_differ():

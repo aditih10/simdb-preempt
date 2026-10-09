@@ -47,6 +47,13 @@ def run_simulation(protocol: str, policy: PreemptionPolicy, cfg: Config, tracer=
         "aborts_validation_preempted": stats.aborts_validation_preempted,
         "aborts_version_conflict": stats.aborts_version_conflict,
         "aborts_lock_timeout": stats.aborts_lock_timeout,
+        "preempts_occ_read": stats.preempts_occ_read,
+        "preempts_occ_validation": stats.preempts_occ_validation,
+        "preempts_2pl_lock_held": stats.preempts_2pl_lock_held,
+        "preempts_2pl_no_lock": stats.preempts_2pl_no_lock,
+        "txns_preempted_in_validation": stats.txns_preempted_in_validation,
+        "txns_preempted_in_validation_committed": stats.txns_preempted_in_validation_committed,
+        "txns_preempted_in_validation_aborted": stats.txns_preempted_in_validation_aborted,
     }
 
 

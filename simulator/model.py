@@ -121,6 +121,12 @@ class Core:
         self.critical_since = None
         self.preempt_count = 0
         self.deferred_count = 0
+        # A3: steps remaining for whatever transaction is currently running
+        # on this core (OCC: remaining reads + 1 for validation; 2PL:
+        # remaining lock+operation steps). None when no transaction is
+        # running. Set/decremented by transactions.py; read by
+        # CommitProximityPolicy.
+        self.ops_remaining = None
         # Only used for the Phase 6 event-trace timeline (tracer.detailed) —
         # see _os_scheduler below. None/non-detailed is the CLI's default
         # path and adds no new events, so results.json stays unaffected.
@@ -195,6 +201,27 @@ class Stats:
     aborts_validation_preempted: int = 0
     aborts_version_conflict: int = 0
     aborts_lock_timeout: int = 0
+    # A1: preemptions by phase, incremented only when a preemption actually
+    # lands (i.e. inside run_operation's own except-Preempted blocks, which
+    # fire exactly once per successful Process.raise_interrupt — a deferred
+    # attempt never reaches here at all). preempts_2pl_no_lock exists only
+    # as a safety net: every 2PL run_operation call happens after that key's
+    # lock is already appended to `held` (transactions.py), so this should
+    # structurally always stay 0 — see Part A verification.
+    preempts_occ_read: int = 0
+    preempts_occ_validation: int = 0
+    preempts_2pl_lock_held: int = 0
+    preempts_2pl_no_lock: int = 0
+    # A2: of the transactions preempted at least once during OCC validation
+    # (was_preempted True, regardless of occ_validation_preempt mode — see
+    # transactions.py), how many went on to commit vs. abort on a version
+    # conflict. Tracked here, at the source, rather than reconstructed from
+    # outside — see the Phase-2 report for why an external before/after
+    # snapshot of committed/aborted is NOT a safe way to attribute outcomes
+    # to a specific transaction in a concurrent run.
+    txns_preempted_in_validation: int = 0
+    txns_preempted_in_validation_committed: int = 0
+    txns_preempted_in_validation_aborted: int = 0
 
     def abort_rate(self):
         return self.aborted / self.attempted if self.attempted else 0.0

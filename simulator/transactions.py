@@ -9,7 +9,25 @@ from .engine import Environment, Preempted
 from .model import Config, Core, DB, Stats
 
 
-def run_operation(env: Environment, core: Core, cfg: Config, txn_id, tracer=None, segment_kind="cpu", stats=None):
+def _record_landed_preempt(stats, phase, lock_held):
+    """A1: called from both of run_operation's except-Preempted blocks —
+    i.e. exactly once per successful Process.raise_interrupt, never for a
+    deferred attempt (which never reaches here at all)."""
+    if stats is None or phase is None:
+        return
+    if phase == "occ_read":
+        stats.preempts_occ_read += 1
+    elif phase == "occ_validation":
+        stats.preempts_occ_validation += 1
+    elif phase == "2pl":
+        if lock_held:
+            stats.preempts_2pl_lock_held += 1
+        else:
+            stats.preempts_2pl_no_lock += 1
+
+
+def run_operation(env: Environment, core: Core, cfg: Config, txn_id, tracer=None, segment_kind="cpu",
+                   stats=None, phase=None, lock_held=True):
     remaining = env.rng.optime.expovariate(1.0 / cfg.mean_op_time)
     extra_delay = 0.0
     preempted = False
@@ -22,6 +40,7 @@ def run_operation(env: Environment, core: Core, cfg: Config, txn_id, tracer=None
             remaining = 0.0
         except Preempted:
             preempted = True
+            _record_landed_preempt(stats, phase, lock_held)
             elapsed = env.now - start
             if tracer:
                 tracer.seg(core.id, txn_id, segment_kind, start, env.now)
@@ -50,6 +69,7 @@ def run_operation(env: Environment, core: Core, cfg: Config, txn_id, tracer=None
                     yield env.timeout(penalty_left)
                     break
                 except Preempted:
+                    _record_landed_preempt(stats, phase, lock_held)
                     if cfg.double_preempt != "ignore":
                         raise
                     if stats is not None:
@@ -78,6 +98,7 @@ def transaction_2pl(env, txn_id, db: DB, core: Core, cfg: Config, stats: Stats, 
     yield core.resource.request()
     core.current_proc = env.active_process
     core.current_txn_id = txn_id
+    core.ops_remaining = len(keys)  # A3: one "step" = acquire a lock + run its operation
     if tracer and tracer.detailed:
         tracer.mark(core.id, txn_id, "arrival", arrival)
 
@@ -94,10 +115,12 @@ def transaction_2pl(env, txn_id, db: DB, core: Core, cfg: Config, stats: Stats, 
         core.enter_critical()
         try:
             extra_delay, _ = yield from run_operation(
-                env, core, cfg, txn_id, tracer, stats=(stats if count_stats else None))
+                env, core, cfg, txn_id, tracer, stats=(stats if count_stats else None),
+                phase="2pl", lock_held=bool(held))
             cpu_time_spent += cfg.mean_op_time + extra_delay
         except Preempted:
             pass
+        core.ops_remaining -= 1
 
     if not aborted:
         if count_stats:
@@ -121,6 +144,7 @@ def transaction_2pl(env, txn_id, db: DB, core: Core, cfg: Config, stats: Stats, 
     core.exit_critical()
     core.current_proc = None
     core.current_txn_id = None
+    core.ops_remaining = None
     core.resource.release()
 
 
@@ -138,6 +162,7 @@ def transaction_occ(env, txn_id, db: DB, core: Core, cfg: Config, stats: Stats, 
     yield core.resource.request()
     core.current_proc = env.active_process
     core.current_txn_id = txn_id
+    core.ops_remaining = len(keys) + 1  # A3: remaining reads, +1 for validation
     if tracer and tracer.detailed:
         tracer.mark(core.id, txn_id, "arrival", arrival)
     core.exit_critical()  # read phase: safe to preempt
@@ -146,10 +171,12 @@ def transaction_occ(env, txn_id, db: DB, core: Core, cfg: Config, stats: Stats, 
         read_versions[key] = db.versions[key]
         try:
             extra_delay, _ = yield from run_operation(
-                env, core, cfg, txn_id, tracer, stats=(stats if count_stats else None))
+                env, core, cfg, txn_id, tracer, stats=(stats if count_stats else None),
+                phase="occ_read")
             cpu_time_spent += cfg.mean_op_time + extra_delay
         except Preempted:
             pass
+        core.ops_remaining -= 1
 
     core.enter_critical()  # validation + write phase: critical
     was_preempted = False
@@ -157,10 +184,13 @@ def transaction_occ(env, txn_id, db: DB, core: Core, cfg: Config, stats: Stats, 
     try:
         extra_delay, was_preempted = yield from run_operation(
             env, core, cfg, txn_id, tracer, segment_kind=validation_kind,
-            stats=(stats if count_stats else None))
+            stats=(stats if count_stats else None), phase="occ_validation")
         cpu_time_spent += cfg.mean_op_time + extra_delay
     except Preempted:
         was_preempted = True
+    # A2: capture this before occ_validation_preempt="delay" potentially lets
+    # the transaction still commit despite was_preempted having been True.
+    preempted_in_validation = was_preempted
 
     # occ_validation_preempt="abort" (default): a preempted validation burst
     # aborts immediately, exactly as before — this condition is equivalent
@@ -189,6 +219,9 @@ def transaction_occ(env, txn_id, db: DB, core: Core, cfg: Config, stats: Stats, 
             stats.committed += 1
             stats.committed_latencies.append(env.now - arrival)
             stats.resolved_latencies.append(env.now - arrival)
+            if preempted_in_validation:
+                stats.txns_preempted_in_validation += 1
+                stats.txns_preempted_in_validation_committed += 1
         if tracer:
             tracer.mark(core.id, txn_id, "commit", env.now)
     else:
@@ -200,12 +233,16 @@ def transaction_occ(env, txn_id, db: DB, core: Core, cfg: Config, stats: Stats, 
                 stats.aborts_validation_preempted += 1
             elif abort_cause == "version_conflict":
                 stats.aborts_version_conflict += 1
+            if preempted_in_validation:
+                stats.txns_preempted_in_validation += 1
+                stats.txns_preempted_in_validation_aborted += 1
         if tracer:
             tracer.mark(core.id, txn_id, "abort", env.now)
 
     core.exit_critical()
     core.current_proc = None
     core.current_txn_id = None
+    core.ops_remaining = None
     core.resource.release()
 
 

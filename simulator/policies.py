@@ -76,9 +76,43 @@ class GracePeriodPolicy(PreemptionPolicy):
         return elapsed < self.max_grace_ms
 
 
+class CommitProximityPolicy(PreemptionPolicy):
+    """Defers preemption only when the running transaction is within `k`
+    steps of finishing — OCC: remaining reads + validation; 2PL: remaining
+    lock+operation steps (see Core.ops_remaining, set/decremented in
+    transactions.py). Unlike CriticalAwarePolicy/GracePeriodPolicy, this
+    doesn't key off critical-section state at all; a transaction far from
+    done gets no protection even while critical, and one that's almost
+    done gets protection even outside a critical section."""
+
+    name = "commit_proximity"
+    k = 1  # overridden per concrete subclass below
+
+    def __init__(self, k: int | None = None):
+        if k is not None:
+            self.k = k
+
+    def should_defer(self, core, env):
+        if core.ops_remaining is None:
+            return False
+        return core.ops_remaining <= self.k
+
+
+class CommitProximityK1Policy(CommitProximityPolicy):
+    name = "commit_proximity_k1"
+    k = 1
+
+
+class CommitProximityK2Policy(CommitProximityPolicy):
+    name = "commit_proximity_k2"
+    k = 2
+
+
 BUILTIN_POLICIES = {
     "none": NoPreemptPolicy,
     "random": RandomPolicy,
     "critical_aware": CriticalAwarePolicy,
     "grace_period": GracePeriodPolicy,
+    "commit_proximity_k1": CommitProximityK1Policy,
+    "commit_proximity_k2": CommitProximityK2Policy,
 }

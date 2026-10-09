@@ -162,7 +162,17 @@ def transaction_occ(env, txn_id, db: DB, core: Core, cfg: Config, stats: Stats, 
     except Preempted:
         was_preempted = True
 
-    if was_preempted:
+    # occ_validation_preempt="abort" (default): a preempted validation burst
+    # aborts immediately, exactly as before — this condition is equivalent
+    # to the original bare `if was_preempted:` at the default, since the
+    # second half is then always True, so default behavior doesn't change.
+    # occ_validation_preempt="delay": being preempted during validation no
+    # longer *itself* causes an abort (the penalty/resumed-burst handling
+    # above is unchanged either way, including on a double_preempt="legacy"
+    # escape caught above as was_preempted=True) — the transaction instead
+    # always falls through to the version check below, aborting only on an
+    # actual version conflict.
+    if was_preempted and cfg.occ_validation_preempt == "abort":
         aborted = True
         abort_cause = "validation_preempted"
     else:

@@ -44,6 +44,7 @@ class Config:
     rng_mode: str = "legacy"            # "legacy" | "split"
     double_preempt: str = "legacy"      # "legacy" | "ignore"
     grace_clock: str = "per_lock"       # "per_lock" | "per_section"
+    occ_validation_preempt: str = "abort"  # "abort" | "delay"
     warmup_ms: float = 0.0
 
 

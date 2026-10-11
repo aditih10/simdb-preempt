@@ -19,6 +19,7 @@ from .policies import (
     RandomPolicy,
     CriticalAwarePolicy,
     GracePeriodPolicy,
+    CommitProximityPolicy,
     BUILTIN_POLICIES,
 )
 from .transactions import run_operation, transaction_2pl, transaction_occ, arrival_process
@@ -39,7 +40,8 @@ __all__ = [
     "Environment", "Process", "Lock", "Preempted",
     "Config", "DB", "Core", "Stats", "Tracer", "percentile",
     "PreemptionPolicy", "NoPreemptPolicy", "RandomPolicy",
-    "CriticalAwarePolicy", "GracePeriodPolicy", "BUILTIN_POLICIES",
+    "CriticalAwarePolicy", "GracePeriodPolicy", "CommitProximityPolicy",
+    "BUILTIN_POLICIES",
     "run_operation", "transaction_2pl", "transaction_occ", "arrival_process",
     "run_simulation", "run_matrix", "run_contention_sweep", "layer_gap_score",
     "build_policy", "TPL_CFG", "OCC_CFG", "POLICIES_TO_TEST", "main",

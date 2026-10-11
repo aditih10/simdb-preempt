@@ -1,0 +1,146 @@
+[run] 0 runs already in C:\Users\Abhinandan\Downloads\os reseach\results\paper\raw.csv (will be skipped)
+[run] E0: 720 total, 720 pending
+[run] E0: 100/720 done (63s elapsed total)
+[run] E0: 200/720 done (113s elapsed total)
+[run] E0: 300/720 done (173s elapsed total)
+[run] E0: 400/720 done (228s elapsed total)
+[run] E0: 500/720 done (285s elapsed total)
+[run] E0: 600/720 done (359s elapsed total)
+[run] E0: 700/720 done (434s elapsed total)
+[run] E0: complete (720 run in this invocation)
+[run] E1: 1080 total, 1080 pending
+[run] E1: 100/1080 done (525s elapsed total)
+[run] E1: 200/1080 done (591s elapsed total)
+[run] E1: 300/1080 done (663s elapsed total)
+[run] E1: 400/1080 done (739s elapsed total)
+[run] E1: 500/1080 done (820s elapsed total)
+[run] E1: 600/1080 done (895s elapsed total)
+[run] E1: 700/1080 done (977s elapsed total)
+[run] E1: 800/1080 done (1046s elapsed total)
+[run] E1: 900/1080 done (1118s elapsed total)
+[run] E1: 1000/1080 done (1185s elapsed total)
+[run] E1: complete (1080 run in this invocation)
+[run] E2: 2160 total, 2160 pending
+[run] E2: 100/2160 done (1297s elapsed total)
+[run] E2: 200/2160 done (1346s elapsed total)
+[run] E2: 300/2160 done (1394s elapsed total)
+[run] E2: 400/2160 done (1445s elapsed total)
+[run] E2: 500/2160 done (1500s elapsed total)
+[run] E2: 600/2160 done (1548s elapsed total)
+[run] E2: 700/2160 done (1597s elapsed total)
+[run] E2: 800/2160 done (1652s elapsed total)
+[run] E2: 900/2160 done (1709s elapsed total)
+[run] E2: 1000/2160 done (1756s elapsed total)
+[run] E2: 1100/2160 done (1806s elapsed total)
+[run] E2: 1200/2160 done (1861s elapsed total)
+[run] E2: 1300/2160 done (1913s elapsed total)
+[run] E2: 1400/2160 done (1962s elapsed total)
+[run] E2: 1500/2160 done (2020s elapsed total)
+[run] E2: 1600/2160 done (2077s elapsed total)
+[run] E2: 1700/2160 done (2123s elapsed total)
+[run] E2: 1800/2160 done (2177s elapsed total)
+[run] E2: 1900/2160 done (2240s elapsed total)
+[run] E2: 2000/2160 done (2297s elapsed total)
+[run] E2: 2100/2160 done (2346s elapsed total)
+[run] E2: complete (2160 run in this invocation)
+[run] E3: 1200 total, 1200 pending
+[run] E3: 100/1200 done (2464s elapsed total)
+[run] E3: 200/1200 done (2548s elapsed total)
+[run] E3: 300/1200 done (163092s elapsed total)
+[run] E3: 400/1200 done (163176s elapsed total)
+[run] E3: 500/1200 done (163242s elapsed total)
+[run] E3: 600/1200 done (163313s elapsed total)
+[run] E3: 700/1200 done (163393s elapsed total)
+[run] E3: 800/1200 done (163478s elapsed total)
+[run] E3: 900/1200 done (163557s elapsed total)
+[run] E3: 1000/1200 done (163630s elapsed total)
+[run] E3: 1100/1200 done (163706s elapsed total)
+[run] E3: 1200/1200 done (163781s elapsed total)
+[run] E3: complete (1200 run in this invocation)
+[run] E4 (adaptive saturation sweep)...
+[E4] 2pl/none arrival_rate=1: mean_latency_ms (avg of 30 seeds) = 1.623
+[E4] 2pl/none arrival_rate=2: mean_latency_ms (avg of 30 seeds) = 1.720
+[E4] 2pl/none arrival_rate=3: mean_latency_ms (avg of 30 seeds) = 2.068
+[E4] 2pl/none arrival_rate=4: mean_latency_ms (avg of 30 seeds) = 3.596
+[E4] 2pl/none arrival_rate=5: mean_latency_ms (avg of 30 seeds) = 426.947
+[E4] 2pl/none: SATURATED at arrival_rate=5 (mean latency 426.9ms > 100.0ms) — skipping higher rates
+[E4] 2pl/none: skipping arrival_rate=6 (saturated at arrival_rate=5)
+[E4] 2pl/random arrival_rate=1: mean_latency_ms (avg of 30 seeds) = 2.186
+[E4] 2pl/random arrival_rate=2: mean_latency_ms (avg of 30 seeds) = 2.884
+[E4] 2pl/random arrival_rate=3: mean_latency_ms (avg of 30 seeds) = 6.288
+[E4] 2pl/random arrival_rate=4: mean_latency_ms (avg of 30 seeds) = 744.350
+[E4] 2pl/random: SATURATED at arrival_rate=4 (mean latency 744.3ms > 100.0ms) — skipping higher rates
+[E4] 2pl/random: skipping arrival_rate=5 (saturated at arrival_rate=4)
+[E4] 2pl/random: skipping arrival_rate=6 (saturated at arrival_rate=4)
+[E4] 2pl/critical_aware arrival_rate=1: mean_latency_ms (avg of 30 seeds) = 1.623
+[E4] 2pl/critical_aware arrival_rate=2: mean_latency_ms (avg of 30 seeds) = 1.720
+[E4] 2pl/critical_aware arrival_rate=3: mean_latency_ms (avg of 30 seeds) = 2.068
+[E4] 2pl/critical_aware arrival_rate=4: mean_latency_ms (avg of 30 seeds) = 3.596
+[E4] 2pl/critical_aware arrival_rate=5: mean_latency_ms (avg of 30 seeds) = 426.947
+[E4] 2pl/critical_aware: SATURATED at arrival_rate=5 (mean latency 426.9ms > 100.0ms) — skipping higher rates
+[E4] 2pl/critical_aware: skipping arrival_rate=6 (saturated at arrival_rate=5)
+[E4] 2pl/grace_period arrival_rate=1: mean_latency_ms (avg of 30 seeds) = 1.890
+[E4] 2pl/grace_period arrival_rate=2: mean_latency_ms (avg of 30 seeds) = 2.278
+[E4] 2pl/grace_period arrival_rate=3: mean_latency_ms (avg of 30 seeds) = 3.616
+[E4] 2pl/grace_period arrival_rate=4: mean_latency_ms (avg of 30 seeds) = 29.619
+[E4] 2pl/grace_period arrival_rate=5: mean_latency_ms (avg of 30 seeds) = 1444.720
+[E4] 2pl/grace_period: SATURATED at arrival_rate=5 (mean latency 1444.7ms > 100.0ms) — skipping higher rates
+[E4] 2pl/grace_period: skipping arrival_rate=6 (saturated at arrival_rate=5)
+[E4] occ/none arrival_rate=1: mean_latency_ms (avg of 30 seeds) = 1.985
+[E4] occ/none arrival_rate=2: mean_latency_ms (avg of 30 seeds) = 2.103
+[E4] occ/none arrival_rate=3: mean_latency_ms (avg of 30 seeds) = 2.797
+[E4] occ/none arrival_rate=4: mean_latency_ms (avg of 30 seeds) = 55.365
+[E4] occ/none arrival_rate=5: mean_latency_ms (avg of 30 seeds) = 1614.735
+[E4] occ/none: SATURATED at arrival_rate=5 (mean latency 1614.7ms > 100.0ms) — skipping higher rates
+[E4] occ/none: skipping arrival_rate=6 (saturated at arrival_rate=5)
+[E4] occ/random arrival_rate=1: mean_latency_ms (avg of 30 seeds) = 2.642
+[E4] occ/random arrival_rate=2: mean_latency_ms (avg of 30 seeds) = 3.659
+[E4] occ/random arrival_rate=3: mean_latency_ms (avg of 30 seeds) = 23.102
+[E4] occ/random arrival_rate=4: mean_latency_ms (avg of 30 seeds) = 1769.512
+[E4] occ/random: SATURATED at arrival_rate=4 (mean latency 1769.5ms > 100.0ms) — skipping higher rates
+[E4] occ/random: skipping arrival_rate=5 (saturated at arrival_rate=4)
+[E4] occ/random: skipping arrival_rate=6 (saturated at arrival_rate=4)
+[E4] occ/critical_aware arrival_rate=1: mean_latency_ms (avg of 30 seeds) = 2.514
+[E4] occ/critical_aware arrival_rate=2: mean_latency_ms (avg of 30 seeds) = 3.281
+[E4] occ/critical_aware arrival_rate=3: mean_latency_ms (avg of 30 seeds) = 11.440
+[E4] occ/critical_aware arrival_rate=4: mean_latency_ms (avg of 30 seeds) = 1473.056
+[E4] occ/critical_aware: SATURATED at arrival_rate=4 (mean latency 1473.1ms > 100.0ms) — skipping higher rates
+[E4] occ/critical_aware: skipping arrival_rate=5 (saturated at arrival_rate=4)
+[E4] occ/critical_aware: skipping arrival_rate=6 (saturated at arrival_rate=4)
+[E4] occ/grace_period arrival_rate=1: mean_latency_ms (avg of 30 seeds) = 2.518
+[E4] occ/grace_period arrival_rate=2: mean_latency_ms (avg of 30 seeds) = 3.318
+[E4] occ/grace_period arrival_rate=3: mean_latency_ms (avg of 30 seeds) = 11.822
+[E4] occ/grace_period arrival_rate=4: mean_latency_ms (avg of 30 seeds) = 1494.087
+[E4] occ/grace_period: SATURATED at arrival_rate=4 (mean latency 1494.1ms > 100.0ms) — skipping higher rates
+[E4] occ/grace_period: skipping arrival_rate=5 (saturated at arrival_rate=4)
+[E4] occ/grace_period: skipping arrival_rate=6 (saturated at arrival_rate=4)
+[run] E5: 300 total, 300 pending
+[run] E5: 100/300 done (164789s elapsed total)
+[run] E5: 200/300 done (164843s elapsed total)
+[run] E5: 300/300 done (164890s elapsed total)
+[run] E5: complete (300 run in this invocation)
+[run] E6: 2160 total, 2160 pending
+[run] E6: 100/2160 done (164962s elapsed total)
+[run] E6: 200/2160 done (165010s elapsed total)
+[run] E6: 300/2160 done (165066s elapsed total)
+[run] E6: 400/2160 done (165121s elapsed total)
+[run] E6: 500/2160 done (165174s elapsed total)
+[run] E6: 600/2160 done (165233s elapsed total)
+[run] E6: 700/2160 done (165284s elapsed total)
+[run] E6: 800/2160 done (165343s elapsed total)
+[run] E6: 900/2160 done (165397s elapsed total)
+[run] E6: 1000/2160 done (165451s elapsed total)
+[run] E6: 1100/2160 done (165510s elapsed total)
+[run] E6: 1200/2160 done (165557s elapsed total)
+[run] E6: 1300/2160 done (165617s elapsed total)
+[run] E6: 1400/2160 done (165664s elapsed total)
+[run] E6: 1500/2160 done (165720s elapsed total)
+[run] E6: 1600/2160 done (165774s elapsed total)
+[run] E6: 1700/2160 done (165833s elapsed total)
+[run] E6: 1800/2160 done (165893s elapsed total)
+[run] E6: 1900/2160 done (165945s elapsed total)
+[run] E6: 2000/2160 done (166009s elapsed total)
+[run] E6: 2100/2160 done (166066s elapsed total)
+[run] E6: complete (2160 run in this invocation)
+[run] wrote C:\Users\Abhinandan\Downloads\os reseach\results\paper\run_manifest.json
+[run] invocation finished in 166100s. 8700 total rows now in C:\Users\Abhinandan\Downloads\os reseach\results\paper\raw.csv

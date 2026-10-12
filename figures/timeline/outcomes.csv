@@ -1,0 +1,14 @@
+core_id,txn_id,time_ms,outcome,abort_cause
+1,1985,1021.405536,abort,version_conflict
+1,1993,1023.670133,commit,
+3,2003,1024.39217,commit,
+3,2011,1024.909573,commit,
+7,1991,1025.02083,abort,version_conflict
+2,2010,1025.853736,commit,
+7,1999,1027.112064,commit,
+7,2007,1029.402513,commit,
+3,2019,1029.491056,abort,version_conflict
+2,2018,1031.08028,abort,version_conflict
+3,2027,1031.974477,commit,
+7,2015,1032.162947,commit,
+2,2026,1033.402314,abort,version_conflict
